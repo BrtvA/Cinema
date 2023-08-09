@@ -28,4 +28,10 @@ public class MovieReqDTO
     public decimal Price { get; set; }
     [Required]
     public bool IsActual { get; set; }
+
+    public virtual void Trim()
+    {
+        Name = Name.Trim();
+        Description = Description.Trim();
+    }
 }

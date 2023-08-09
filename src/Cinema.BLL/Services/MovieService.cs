@@ -33,6 +33,7 @@ public class MovieService : IMovieService
         try
         {
             ServiceResult<string> result;
+            movieDTO.Trim();
             var movie = await _movieRepository.GetByNameAsync(movieDTO.Name);
             if (movie is not null)
             {
@@ -131,6 +132,8 @@ public class MovieService : IMovieService
 
     public async Task<ServiceResult<MovieGenreListRespDTO>> ListAsync(AdminMovieReqDTO moviePageDTO, int pageSize)
     {
+        moviePageDTO.Trim();
+
         var movies = await _movieRepository.ListAsync(pageSize * (moviePageDTO.Page - 1), pageSize, moviePageDTO.Search);
         int count = await _movieRepository.GetCountAsync(moviePageDTO.Search);
         var genres = await _genreRepository.ListAsync();
@@ -148,6 +151,7 @@ public class MovieService : IMovieService
         try
         {
             ServiceResult<string> result;
+            movieDTO.Trim();
             var movie = await _movieRepository.GetAsync(movieDTO.Id);
             if (movie is null)
             {

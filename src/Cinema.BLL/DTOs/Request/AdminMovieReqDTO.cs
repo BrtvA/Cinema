@@ -11,4 +11,12 @@ public class AdminMovieReqDTO
     [Required]
     [RegularExpression("^[А-Яа-яЁё0-9:\\- ]+$")]
     public string Search { get; set; } = "";
+
+    public virtual void Trim()
+    {
+        if (Search is not null)
+        {
+            Search = Search.Trim();
+        }
+    }
 }

@@ -13,4 +13,9 @@ public class Genre
     public string Name { get; set; } = null!;
 
     public List<MovieGenre> MovieGenres { get; set; } = new();
+
+    public virtual void Trim()
+    {
+        Name = Name.Trim();
+    }
 }
