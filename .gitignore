@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Custom path
+/src/Cinema.PL/wwwroot/uploads
+
 # User-specific files
 *.rsuser
 *.suo
