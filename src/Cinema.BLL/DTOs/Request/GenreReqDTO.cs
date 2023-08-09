@@ -9,4 +9,9 @@ public class GenreReqDTO
     [Required]
     [RegularExpression("^[А-Яа-яЁё\\- ]+$")]
     public string Name { get; set; } = null!;
+
+    public virtual void Trim()
+    {
+        Name = Name.Trim();
+    }
 }

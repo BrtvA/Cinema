@@ -26,6 +26,7 @@ public class GenreService : IGenreService
         try
         {
             ServiceResult<string> result;
+            genreDTO.Trim();
             var genre = await _genreRepository.GetByNameAsync(genreDTO.Name);
             if (genre is not null)
             {
@@ -69,6 +70,7 @@ public class GenreService : IGenreService
         try
         {
             ServiceResult<string> result;
+            genreDTO.Trim();
             var genre = await _genreRepository.GetAsync(genreDTO.Id);
             if (genre is null)
             {
