@@ -1,0 +1,70 @@
+p{
+    margin:0px;
+}
+
+.hover-effect:hover {
+    border-radius: 5px;
+    background-color: #2f3031;
+}
+
+.error{
+    color: #dc3545;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.width-500 {
+    width: 500px;
+}
+
+.height-70 {
+    height: 70px;
+}
+
+/* Фильмы */
+#movieDescriptionInput {
+    min-height: 200px;
+}
+
+/* Информация при покупке */
+.text-justify {
+    text-align: justify;
+    word-wrap: break-word;
+}
+
+.cinema-place-number {
+    width: 50px;
+    height: 30px;
+    margin: 5px;
+}
+
+.cinema-place-position{
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+}
+
+.cinema-place-position-circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: dodgerblue;
+}
+
+.cinema-place-position-circle:hover{
+    width: 30px;
+    height: 30px;
+    background-color: #198754;
+}
+
+.cinema-place-position-circle.selected {
+    width: 30px;
+    height: 30px;
+    background-color: blue;
+}
+
+.cinema-place-position-circle.chosen {
+    width: 30px;
+    height: 30px;
+    background-color: #198754;
+}

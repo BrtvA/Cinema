@@ -1,0 +1,194 @@
+﻿@{
+    ViewData["Title"] = "Кинотеатр - афиша";
+}
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using Cinema.PL.Models;
+@model ScheduleViewModel;
+
+<main>
+    <div class="container mt-3">
+        <div class="row col-12">
+            <section class="col-8 d-flex flex-column">
+                <div class="d-flex flex-row justify-content-center align-items-center mt-3">
+                    <div class="col-10 d-flex flex-row justify-content-center align-items-center">
+                        <p class="fs-4">Текущая афиша</p>
+                    </div>
+                    <div class="col-2 d-flex flex-row justify-content-center align-items-center">
+                        @if (Model.MovieList.Count() != 0 && Model.HallList.Count() != 0)
+                        {
+                            <button id="newScheduleBtn" type="reset" class="btn btn-success">Новый</button>
+                        }
+                        else
+                        {
+                            <button id="noticeBtn" type="button" class="btn btn-success">Новый</button>
+                        }
+                    </div>
+                </div>
+
+                <form class="d-flex flex-column" method="get" action="/schedule">
+                    <div class="col-12 d-flex flex-row">
+                        <div class="col-4 d-flex flex-row justify-content-center align-items-center height-70 pe-2 mt-3">
+                            <input id="schedulePageInput" name="page" type="hidden" value=@Model.Page />
+                            <select id="scheduleGenreInput" name="genresId" class="fs-5 form-select h-100" multiple size="2">
+                                @if (Model.GenreList.Count() != 0){
+                                    @foreach (var genre in Model.GenreList)
+                                    {
+                                        var selectedOption = Model.GenresId is not null && Model.GenresId.Contains(genre.Id) ? "selected" : "";
+                                        <option value="@genre.Id" @selectedOption>@genre.Name </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-3 d-flex flex-row justify-content-end align-items-start height-70 ps-2 pe-2 mt-3">
+                            <input id="scheduleDateInput" class="fs-5 form-control h-100" name="date" type="date" value="@Model.Date" />
+                        </div>
+                        <div class="col-3 d-flex flex-row justify-content-center align-items-center height-70 ps-2 mt-3">
+                            <select id="scheduleGenreInput" name="hallId" class="fs-5 form-select h-100">
+                                <option value="0">Выберете зал </option>
+                                @if (Model.HallList.Count() != 0)
+                                {
+                                    @foreach (var hall in Model.HallList)
+                                    {
+                                        var selectedOption = Model.HallId == hall.Id ? "selected" : "";
+                                        <option value="@hall.Id" @selectedOption>@hall.Name </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-2 d-flex flex-row justify-content-center align-items-center">
+                            <button type="submit" class="btn btn-success mt-3">Найти</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="d-flex flex-column mt-3">
+                    @if(Model.ScheduleList is not null && Model.ScheduleList.Count() != 0){
+                        var numMovie = (Model.Page - 1) * ViewBag.PageSize + 1;
+
+                        @foreach(var schedule in Model.ScheduleList)
+                        {
+                            <article class="d-flex flex-column justify-content-center mt-3">
+                                <div class="d-flex flex-row justify-content-center">
+                                    <div class="col-5 d-flex flex-column justify-content-start">
+                                        <img src="~/uploads/@schedule.ImageName" class="rounded" />
+                                    </div>
+                                    <div class="col-5 d-flex flex-column justify-content-start align-items-start ms-3">
+                                        <div class="d-flex flex-row justify-content-start">
+                                            <a href="#" class="fs-4 watch-action-a" data-id=@schedule.Id>@schedule.Name</a>
+                                        </div>
+                                        <div class="d-flex flex-row justify-content-start">
+                                            <p class="fs-5 lead">@schedule.StartTime.ToString("dd.MM.yy HH:mm")</p>
+                                        </div>
+                                        <div class="d-flex flex-row justify-content-start">
+                                            <p class="fs-5 lead">@schedule.HallName</p>
+                                        </div>
+                                        <div class="d-flex flex-row justify-content-start">
+                                            @foreach (var genre in schedule.Genres)
+                                            {
+                                                <div class="bg-light-subtle border border-2 rounded me-2 mt-2 p-1">
+                                                    <p class="fs-5">@genre</p>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <form class="col-2 d-flex flex-row justify-content-center align-items-start schedule-list-form" action="">
+                                        <input type="hidden" value=@schedule.Id name="id" />
+                                        <button type="submit" class="btn btn-outline-success">Удалить</button>
+                                    </form>
+                                </div>
+                            </article>
+
+                            numMovie++;
+                        }
+                    }
+
+                    <article class="d-flex flex-column justify-content-center mt-3">
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            @{
+                                var prevDisabled = "";
+                                var nextDisabled = "";
+                                var prevPage = Model.Page - 1;
+                                var nextPage = Model.Page + 1;
+
+                                if (Model.Page == 1)
+                                {
+                                    prevDisabled = "disabled";
+                                }
+
+                                if (!Model.NextPageExist)
+                                {
+                                    nextDisabled = "disabled";
+                                }
+
+                            }
+                            <form method="get" action="/schedule">
+                                <input name="page" type="hidden" value=@prevPage />
+                                <input name="hallId" type="hidden" value=@Model.HallId />
+                                <select name="genresId" style="display:none" multiple>
+                                    @if (Model.GenresId is not null && Model.GenresId.Count() != 0)
+                                    {
+                                        @foreach (var id in Model.GenresId)
+                                        {
+                                            <option value="@id" selected></option>
+                                        }
+                                    }
+                                </select>
+                                <input name="date" type="hidden" value="@Model.Date" />
+                                <button class="btn btn-primary @prevDisabled">Назад</button>
+                            </form>
+                            <p class="fs-5 mx-3">@Model.Page</p>
+                            <form method="get" action="/schedule">
+                                <input name="page" type="hidden" value=@nextPage />
+                                <input name="hallId" type="hidden" value=@Model.HallId />
+                                <select name="genresId" style="display:none" multiple>
+                                    @if (Model.GenresId is not null && Model.GenresId.Count() != 0)
+                                    {
+                                        @foreach (var id in Model.GenresId)
+                                        {
+                                            <option value="@id" selected></option>
+                                        }
+                                    }
+                                </select>
+                                <input name="date" type="hidden" value="@Model.Date" />
+                                <button class="btn btn-primary @nextDisabled">Вперед</button>
+                            </form>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            @if (Model.MovieList.Count() != 0 && Model.HallList.Count() != 0)
+            {
+                <section class="col-4 d-flex flex-row border-start border-1 border-white border-opacity-25">
+                    <div class="col">
+                        <form id="scheduleForm" class="d-flex flex-column justify-content-center"
+                              action="" data-send-type="create">
+                            <input id="scheduleIdInput" name="id" type="hidden" value="-1" />
+                            <select id="scheduleMovieInput" name="movieId" class="fs-5 form-select">
+                                @foreach (var movie in Model.MovieList)
+                                {
+                                    <option value="@movie.Id">@movie.Name </option>
+                                }
+                            </select>
+                            <select id="scheduleHallInput" name="hallId" class="fs-5 form-select mt-3">
+                                @foreach (var hall in Model.HallList)
+                                {
+                                    <option value="@hall.Id">@hall.Name </option>
+                                }
+                            </select>
+                            <input id="scheduleTimeStart" class="fs-5 form-control mt-3" name="startTime" type="datetime-local" />
+                            <button id="creteScheduleBtn" type="submit" class="btn btn-success mt-3">Создать</button>
+                        </form>
+                    </div>
+                </section>
+            }
+        </div>
+    </div>
+</main>
+<script src="~/lib/jquery/dist/jquery-3.7.0.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script type="module" src="~/js/schedule.js"></script>

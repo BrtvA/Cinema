@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <header class="border-bottom border-1 border-white border-opacity-75">
+        <div class="container">
+            <nav class="row navbar navbar-expand-lg navbar-light">
+                <div class="col">
+                    <a href="/home" class="nav-link">
+                        <h class="fs-2">Кинотеатр Аврора</h>
+                    </a>
+                </div>
+                <div class="d-flex col justify-content-end">
+                    @if (ViewBag.IsLoggedIn)
+                    {
+                        if (ViewBag.IsAdmin)
+                        {
+                            <a href="/genre" class="btn btn-outline-success me-2">Кабинет</a>
+                        }
+                        <a href="/logout" class="btn btn-outline-success ms-2">Выйти</a>
+                    }
+                    else
+                    {
+                        <a href="/login" class="btn btn-outline-success">Войти</a>
+                    }
+                </div>
+            </nav>
+        </div>
+    </header>
+    @RenderBody()
+</body>
+</html>

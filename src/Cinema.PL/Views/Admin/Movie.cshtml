@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Кинотеатр - фильмы";
+}
+
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using Cinema.PL.Models;
+@model MovieViewModel;
+
+<main>
+    <div class="container mt-3">
+        <div class="row col-12">
+            <section class="col-6 d-flex flex-column">
+                <form id="searchForm" class="d-flex flex-column" action="">
+                    <div class="col-12 d-flex flex-row">
+                        <div class="col-9 d-flex flex-row justify-content-center align-items-center">
+                            <input id="moviePageInput" name="page" type="hidden" value=@Model.Page />
+                            <input id="movieSearchInput" name="search" type="text" class="fs-5 form-control" 
+                                   placeholder="Строка поиска..." value="@Model.Search" />
+                        </div>
+                        <div class="col-3 d-flex flex-row justify-content-center align-items-center">
+                            <button type="submit" class="btn btn-success">Найти</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="d-flex flex-row justify-content-center align-items-center mt-3">
+                    <div class="col-9 d-flex flex-row justify-content-center align-items-center">
+                        <p class="fs-4">Список существующих фильмов</p>
+                    </div>
+                    <div class="col-3 d-flex flex-row justify-content-center align-items-center">
+                        @if (Model.GenreList.Count() != 0)
+                        {
+                            <button id="newMovieBtn" type="reset" class="btn btn-success">Новый</button>
+                        }
+                        else
+                        {
+                            <button id="noticeBtn" type="button" class="btn btn-success">Новый</button>
+                        }
+                    </div>
+                </div>
+                
+                <div class="d-flex flex-column mt-3">
+                    @if (Model.MovieList.Count() != 0)
+                    {
+                        var numMovie = (Model.Page - 1) * ViewBag.PageSize + 1;
+                        @foreach (var movie in Model.MovieList)
+                        {
+                            <article class="d-flex flex-column justify-content-center">
+                                <div class="d-flex flex-row justify-content-center mt-3">
+                                    <div class="col-1 d-flex flex-row justify-content-start align-items-start">
+                                        <p class="fs-4">@numMovie.</p>
+                                    </div>
+                                    <div class="col-8 d-flex flex-row justify-content-start align-items-start">
+                                        <a href="#" class="fs-4 watch-action-a" data-id=@movie.Id>@movie.Name</a>
+                                    </div>
+                                    <form class="col-3 d-flex flex-row justify-content-center align-items-start movie-list-form" action="">
+                                        <input type="hidden" value=@movie.Id name="id" />
+                                        <button type="submit" class="btn btn-outline-success">Удалить</button>
+                                    </form>
+                                </div>
+                            </article>
+
+                            numMovie++;
+                        }
+                    }
+
+                    <article class="d-flex flex-column justify-content-center mt-3">
+                        <div class="d-flex flex-row justify-content-center align-items-center">
+                            @{
+                                var prevDisabled = "";
+                                var nextDisabled = "";
+                                var prevPage = Model.Page - 1;
+                                var nextPage = Model.Page + 1;
+
+                                if (Model.Page == 1)
+                                {
+                                    prevDisabled = "disabled";
+                                }
+
+                                if (!Model.NextPageExist)
+                                {
+                                    nextDisabled = "disabled";
+                                }
+                            }
+
+                            <form method="get" action="/movie">
+                                <input name="page" type="hidden" value=@prevPage />
+                                <input name="search" type="hidden" value="@Model.Search" />
+                                <button class="btn btn-primary @prevDisabled">Назад</button>
+                            </form>
+                            <p class="fs-5 mx-3">@Model.Page</p>
+                            <form method="get" action="/movie">
+                                <input name="page" type="hidden" value=@nextPage />
+                                <input name="search" type="hidden" value="@Model.Search" />
+                                <button class="btn btn-primary @nextDisabled">Вперед</button>
+                            </form>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            @if (Model.GenreList.Count() != 0)
+            {
+                <section class="col-6 d-flex flex-row border-start border-1 border-white border-opacity-25">
+                    <div class="col-6">
+                        <form id="movieForm" class="d-flex flex-column justify-content-center" action=""
+                              enctype="multipart/form-data" data-send-type="create">
+                            <input id="movieIdInput" name="id" class="fs-5 form-control" type="hidden" value="-1" />
+                            <label for="movieNameInput" class="fs-5">Название фильма</label>
+                            <input id="movieNameInput" name="name" class="fs-5 form-control" type="text" />
+                            <label for="movieDescriptionInput" class="fs-5 mt-3">Описание</label>
+                            <textarea id="movieDescriptionInput" name="description" class="fs-5 form-control"></textarea>
+                            <label for="movieDurationInput" class="fs-5 mt-3">Длительность, мин</label>
+                            <input id="movieDurationInput" name="duration" class="fs-5 form-control" type="number" />
+                            <label for="moviePriceInput" class="fs-5 mt-3">Цена, руб</label>
+                            <input id="moviePriceInput" name="price" class="fs-5 form-control" type="number" />
+                            <label for="movieGenresIdInput" class="fs-5 mt-3">Жанры</label>
+                            <select id="movieGenresIdInput" name="genresId" class="fs-5 form-select" multiple>
+                                @foreach (var genre in Model.GenreList)
+                                {
+                                    <option value=@genre.Id>@genre.Name </option>
+                                }
+                            </select>
+                            <div id="selectGenreList" class="d-flex flex-row flex-wrap justify-content-start align-items-start">
+
+                            </div>
+                            <div>
+                                <input id="movieIsActualInput" type="checkbox" name="isActual">
+                                <label for="movieIsActualInput" class="fs-5 mt-3">Фильм в прокате</label>
+                            </div>
+                            <input name="image" id="movieFileInput" class="form-control form-control-lg mt-3" type="file" accept="image/png, image/jpeg" />
+                            <button id="creteMovieBtn" type="submit" class="btn btn-success mt-3">Создать</button>
+                        </form>
+                    </div>
+                    <div class="col-6 ms-3">
+                        <img id="imgshow" src="~/img/image-place.jpg" class="img-fluid rounded" />
+                    </div>
+                </section>
+            }
+        </div>
+    </div>
+</main>
+<script src="~/lib/jquery/dist/jquery-3.7.0.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script type="module" src="~/js/movie.js"></script>

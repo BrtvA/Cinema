@@ -1,0 +1,80 @@
+﻿@using Cinema.PL.Models;
+@model PaymentViewModel;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оплата</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+    <div class="container mt-3">
+        <section class="d-flex flex-column flex-fill align-items-center">
+            <article class="d-flex flex-column width-500">
+                <div class="d-flex flex-row justify-content-start align-items-center">
+                    <p class="fs-5">Заказ: Билеты в кинотеатр</p>
+                </div>
+                <div class="d-flex flex-row justify-content-start align-items-center">
+                    <p class="fs-5">Итого:</p>
+                    <p class="fs-5 ps-2">@Model.Price</p>
+                    <p class="fs-5 ps-2">руб</p>
+                </div>
+            </article>
+            <article class="d-flex row justify-content-center align-items-center 
+                            border border-3 border-secondary border-opacity-75 
+                            rounded pt-2 pb-2 width-500 mt-3">
+                <form id="paymentForm" class="d-flex flex-column">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        <p class="fs-5 text-danger">Банк</p>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <input id="paymentGuidIdInput" type="hidden" name="guidId" value="@Model.GuidId" />
+                        <label for="paymentCardNumber" class="fs-6">Номер карты</label>
+                        <input id="paymentCardNumberInput" name="cardNumber" type="text" 
+                               class="fs-5 form-control" placeholder="0000 0000 0000 0000"
+                               maxlength="19" />
+                    </div>
+                    <div class="d-flex flex-row justify-content-center align-items-start mt-3">
+                        <div class="col-6 d-flex flex-row justify-content-center align-items-center mt-2">
+                            <p class="fs-6">Срок действия (ММ / ГГ)</p>
+                        </div>
+                        <div class="col-3 d-flex flex-column px-2">
+                            <input id="paymentMonthEndInput" name="monthEnd" type="text" 
+                                   class="fs-5 form-control" placeholder="MM"
+                                   maxlength="2" />
+                        </div>
+                        <div class="col-3 d-flex flex-column ps-2">
+                            <input id="paymentYearEndInput" name="yearEnd" type="text" 
+                                   class="fs-5 form-control" placeholder="ГГ"
+                                   maxlength="2" />
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-end align-items-center mt-3">
+                        <div class="col-6 d-flex flex-row justify-content-end align-items-start">
+                            <div class="col d-flex flex-row justify-content-center align-items-center px-2 mt-2">
+                                <label for="paymentCvcInput" class="fs-6">CVV / CVC</label>
+                            </div>
+                            <div class="col d-flex flex-column ps-2">
+                                <input id="paymentCvcInput" name="cvc" type="text"
+                                       class="fs-5 form-control" placeholder="000"
+                                       maxlength="3" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </article>
+            <article id="btnArticle" class="d-flex flex-column flex-fill align-items-start width-500 mt-3">
+                <div class="d-flex flex-row justify-content-center">
+                    <button class="btn btn-success" form="paymentForm" type="submit">Оплатить</button>
+                </div>
+            </article>
+        </section>
+    </div>
+    <script src="~/lib/jquery/dist/jquery-3.7.0.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script type="module" src="~/js/payment.js"></script>
+</body>
+</html>

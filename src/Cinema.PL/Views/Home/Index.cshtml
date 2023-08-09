@@ -1,0 +1,134 @@
+﻿@{
+    ViewData["Title"] = "Кинотеатр";
+}
+
+@{
+    Layout = "~/Views/Shared/_LayoutСustomer.cshtml";
+}
+
+@using Cinema.PL.Models;
+@model ScheduleInfoViewModel;
+
+<main>
+    <div class="container d-flex flex-column mt-3">
+        <section class="row flex-fill justify-content-center">
+            <form class="col-6 d-flex flex-row justify-content-center align-items-center"
+                  method="get" action="/home">
+                <div class="col-5 d-flex flex-row justify-content-center align-items-center height-70 pe-2">
+                    @{
+                        var currentDate = DateTime.Now;
+                    }
+                    <input name="page" type="hidden" value=@Model.Page required />
+                    <input class="fs-5 form-control h-100" name="date" type="date"
+                           value="@Model.Date" required
+                           min="@currentDate.ToString("yyyy-MM-dd")"
+                           max="@currentDate.AddDays(Model.DayShift).ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-5 d-flex flex-row justify-content-center align-items-center height-70 ps-2 pe-2">
+                    <select id="scheduleGenreInput" name="genresId" class="fs-5 form-select h-100"
+                            multiple size="2">
+                        @if (Model.GenreList.Count() != 0)
+                        {
+                            @foreach (var genre in Model.GenreList)
+                            {
+                                var selectedOption = Model.GenresId is not null 
+                                                  && Model.GenresId.Contains(genre.Id) ? "selected" : "";
+                                <option value="@genre.Id" @selectedOption>@genre.Name </option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-2 d-flex flex-row justify-content-center align-items-center ps-2">
+                    <button class="btn btn-success" type="submit">Найти</button>
+                </div>
+            </form>
+        </section>
+        <section class="row flex-fill justify-content-center">
+            <div class="col-6">
+                @if(Model.ScheduleList.Count() != 0){
+                    var numMovie = (Model.Page - 1) * ViewBag.PageSize + 1;
+
+                    @foreach(var schedule in Model.ScheduleList)
+                    {
+                        <article class="d-flex flex-column justify-content-center mt-3">
+                            <div class="d-flex flex-row justify-content-start">
+                                <div class="col-4 d-flex flex-column justify-content-start">
+                                    <img src="~/uploads/@schedule.ImageName" class="rounded" />
+                                </div>
+                                <div class="col-5 d-flex flex-column justify-content-start align-items-start ms-2">
+                                    <div class="d-flex flex-row justify-content-start">
+                                        <a href="/info?movieId=@schedule.Id&&date=@Model.Date"
+                                           class="fs-4 watch-action-a" data-id=@schedule.Id>
+                                                @schedule.Name
+                                        </a> @*Формат даты*@
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-start">
+                                        @foreach (var genre in schedule.Genres)
+                                        {
+                                            <div class="bg-light-subtle border border-2 rounded ms-2 mt-2 p-1">
+                                                <p class="fs-5">@genre</p>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        numMovie++;
+                    }
+                }
+
+                <article class="d-flex flex-column justify-content-center mt-3">
+                    <div class="d-flex flex-row justify-content-center align-items-center">
+                        @{
+                            var prevDisabled = "";
+                            var nextDisabled = "";
+                            var prevPage = Model.Page - 1;
+                            var nextPage = Model.Page + 1;
+
+                            if (Model.Page == 1)
+                            {
+                                prevDisabled = "disabled";
+                            }
+
+                            if (!Model.NextPageExist)
+                            {
+                                nextDisabled = "disabled";
+                            }
+
+                        }
+                        <form method="get" action="/schedule">
+                            <input name="page" type="hidden" value=@prevPage />
+                            <select name="genresId" style="display:none" multiple>
+                                @if (Model.GenresId is not null && Model.GenresId.Count() != 0)
+                                {
+                                    @foreach (var id in Model.GenresId)
+                                    {
+                                        <option value="@id" selected></option>
+                                    }
+                                }
+                            </select>
+                            <input name="date" type="hidden" value=@Model.Date />   @*Формат даты*@
+                            <button class="btn btn-primary @prevDisabled">Вперед</button>
+                        </form>
+                        <p class="fs-5 mx-3">@Model.Page</p>
+                        <form method="get" action="/schedule">
+                            <input name="page" type="hidden" value=@nextPage />
+                            <select name="genresId" style="display:none" multiple>
+                                @if (Model.GenresId is not null && Model.GenresId.Count() != 0)
+                                {
+                                    @foreach (var id in Model.GenresId)
+                                    {
+                                        <option value="@id" selected></option>
+                                    }
+                                }
+                            </select>
+                            <input name="date" type="hidden" value=@Model.Date />  @*Формат даты*@
+                            <button class="btn btn-primary @nextDisabled">Вперед</button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+</main>

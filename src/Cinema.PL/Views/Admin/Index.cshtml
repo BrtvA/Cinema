@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Кинотеатр - жанры";
+}
+
+﻿@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@using Cinema.PL.Models;
+@model GenreViewModel;
+
+<main>
+    <div class="container d-flex flex-column mt-3">
+        <section class="row flex-fill justify-content-center">
+            <div class="col-6">
+                <form id="genreForm" action="">
+                    <div class="d-flex flex-column genre-values">
+                        <label for="genreInput" class="fs-5">Введите название нового жанра</label>
+                        <input id="genreInput" class="form-control fs-5" name="name" />
+                    </div>
+                    <button class="btn btn-success mt-2" type="submit">Создать</button>
+                </form>
+            </div>
+        </section>
+        @if (Model.GenreList.Count() != 0)
+        {
+            var num = (Model.Page - 1) * ViewBag.PageSize + 1;
+
+            <section class="container d-flex flex-column mt-3">
+                <div class="row flex-fill justify-content-center">
+                    <div class="col-6">
+                        <p class="fs-4">Список существующих жанров</p>
+                    </div>
+                </div>
+                <div class="row flex-fill justify-content-center">
+                    <div class="col-6 d-flex flex-column">
+                        @foreach (var genre in Model.GenreList)
+                        {
+                            var genreId = $"genre-id-{genre.Id}";
+                            var genreValue = $"genre-value-{genre.Id}";
+                            var genreListId = $"genre-list-id-{genre.Id}";
+
+                            <article class="d-flex flex-column align-items-center p-2 hover-effect">
+                                <div class="col-12 d-flex flex-row flex-wrap align-items-center">
+                                    <div class="col-1 d-flex flex-row align-items-center">
+                                        <p class="fs-5">@num.</p>
+                                    </div>
+                                    <form id=@genreListId class="col-7 d-flex flex-row align-items-center genre-values genre-list-form" action="">
+                                        <input id=@genreId type="hidden" value=@genre.Id name="id" />
+                                        <input id=@genreValue class="fs-5 form-control me-3" type="text" value=@genre.Name name="name" />
+                                    </form>
+                                    <div class="col-4 d-flex flex-row align-items-center justify-content-between">
+                                        <div class="col d-flex justify-content-start">
+                                            <button type="submit" class="btn btn-outline-success change-action-btn" form=@genreListId>Изменить</button>
+                                        </div>
+                                        <div class="col d-flex justify-content-end">
+                                            <button type="button" class="btn btn-outline-success delete-action-btn">Удалить</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            num++;
+                        }
+                    </div>
+                </div>
+            </section>
+        }
+
+        <section class="mt-2">
+            <div class="row flex-fill justify-content-center">
+                <div class="d-flex flex-row justify-content-center align-items-center">
+                    @{
+                        var prevDisabled = "";
+                        var nextDisabled = "";
+                        var prevPage = Model.Page - 1;
+                        var nextPage = Model.Page + 1;
+
+                        if (Model.Page == 1)
+                        {
+                            prevDisabled = "disabled";
+                        }
+
+                        if (!Model.NextPageExist)
+                        {
+                            nextDisabled = "disabled";
+                        }
+
+                    }
+                    <a href="/genre/@prevPage" class="btn btn-primary @prevDisabled">Назад</a>
+                    <p class="fs-5 mx-3">@Model.Page</p>
+                    <a href="/genre/@nextPage" class="btn btn-primary @nextDisabled">Вперед</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<script src="~/lib/jquery/dist/jquery-3.7.0.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script type="module" src="~/js/genre.js"></script>
