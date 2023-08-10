@@ -155,6 +155,7 @@ $(document).ready(function () {
                 $("#moviePriceInput").val(`${result.price}`);
                 $('#movieIsActualInput').prop('checked', result.isActual);
                 $('#movieIsActualInput').val(result.isActual);
+                $('#movieGenresIdInput option').prop('selected', false);
                 result.genresId.forEach(id => {
                     $(`#movieGenresIdInput option[value=${id}]`).prop('selected', true);
                 });
