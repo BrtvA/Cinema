@@ -97,7 +97,7 @@
                             }
 
                         }
-                        <form method="get" action="/schedule">
+                        <form method="get" action="/home">
                             <input name="page" type="hidden" value=@prevPage />
                             <select name="genresId" style="display:none" multiple>
                                 @if (Model.GenresId is not null && Model.GenresId.Count() != 0)
@@ -109,10 +109,10 @@
                                 }
                             </select>
                             <input name="date" type="hidden" value=@Model.Date />   @*Формат даты*@
-                            <button class="btn btn-primary @prevDisabled">Вперед</button>
+                            <button class="btn btn-primary @prevDisabled">Назад</button>
                         </form>
                         <p class="fs-5 mx-3">@Model.Page</p>
-                        <form method="get" action="/schedule">
+                        <form method="get" action="/home">
                             <input name="page" type="hidden" value=@nextPage />
                             <select name="genresId" style="display:none" multiple>
                                 @if (Model.GenresId is not null && Model.GenresId.Count() != 0)
