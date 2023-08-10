@@ -5,6 +5,7 @@ namespace Cinema.BLL.DTOs.Request;
 public class AdminMovieReqDTO
 {
     [Required]
+    [Range(1, int.MaxValue)]
     public int Page { get; set; } = 1;
     [StringLength(50)]
     [MinLength(1)]
