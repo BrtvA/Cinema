@@ -1,7 +1,4 @@
-﻿using Cinema.BLL.CustomExceptions;
-using Cinema.BLL.DTOs.Request;
-using Cinema.BLL.DTOs.Response;
-using Cinema.DAL.Entities;
+﻿using Cinema.BLL.DTOs.Request;
 using Cinema.DAL.Models;
 
 namespace Cinema.BLL.Services.Interfaces;
