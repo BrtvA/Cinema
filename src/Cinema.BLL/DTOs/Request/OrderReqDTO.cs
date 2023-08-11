@@ -1,4 +1,5 @@
-﻿using Cinema.DAL.Models;
+﻿using Cinema.BLL.DTOs.Request.Attributes;
+using Cinema.DAL.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cinema.BLL.DTOs.Request;
@@ -9,5 +10,6 @@ public class OrderReqDTO
     [Range(1, int.MaxValue)]
     public int ScheduleId { get; set; }
     [Required]
+    [ArrayMinValue(1, 1)]
     public PositionModel[] Positions { get; set; } = null!;
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Cinema.BLL.DTOs.Request.Attributes;
+using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cinema.BLL.DTOs.Request;
@@ -22,6 +23,7 @@ public class MovieReqDTO
     public IFormFile? Image { get; set; }
     [Required]
     [MinLength(1)]
+    [ArrayMinValue(1)]
     public int[] GenresId { get; set; } = null!;
     [Required]
     [Range(1, int.MaxValue)]

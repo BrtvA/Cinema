@@ -69,27 +69,23 @@ public class OrderService : IOrderService
                     {
                         var sch = await _orderRepository.GetByIdAndPositionAsync(orderDTO.ScheduleId, position);
 
-                        if (sch is null && position.Row >= 1 && position.Row <= hall.Rows 
-                            && position.Column >= 1 && position.Column <= hall.Columns)
-                        {
-                            orderList.Add(
-                                new Order
-                                {
-                                    ScheduleId = orderDTO.ScheduleId,
-                                    GuidId = guidId,
-                                    CreationDate = currentTime,
-                                    UserId = userId,
-                                    Row = position.Row,
-                                    Column = position.Column,
-                                    IsPaid = false,
-                                }
-                            );
-                        }
-                        else
+                        if (sch is not null || position.Row > hall.Rows 
+                            || position.Column > hall.Columns)
                         {
                             isContinue = false;
                             break;
                         }
+
+                        orderList.Add(new Order
+                        {
+                            ScheduleId = orderDTO.ScheduleId,
+                            GuidId = guidId,
+                            CreationDate = currentTime,
+                            UserId = userId,
+                            Row = position.Row,
+                            Column = position.Column,
+                            IsPaid = false,
+                        });
                     }
 
                     if (isContinue)
