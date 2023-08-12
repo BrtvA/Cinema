@@ -46,7 +46,7 @@ public class ApplicationContext : DbContext
                     .HasIndex(mg => mg.MovieId);
         modelBuilder.Entity<MovieGenre>()
                     .Property(mg => mg.MovieId)
-                    .HasColumnType("smallint")
+                    .HasColumnType("int")
                     .IsRequired();
         modelBuilder.Entity<MovieGenre>()
                     .Property(mg => mg.GenreId)
@@ -64,7 +64,7 @@ public class ApplicationContext : DbContext
                     .HasIndex(m => m.IsActual);
         modelBuilder.Entity<Movie>()
                     .Property(m => m.Id)
-                    .HasColumnType("smallint")
+                    .HasColumnType("int")
                     .ValueGeneratedOnAdd()
                     .IsRequired();
         modelBuilder.Entity<Movie>()
@@ -130,7 +130,7 @@ public class ApplicationContext : DbContext
                     });
         modelBuilder.Entity<Schedule>()
                     .Property(s => s.Id)
-                    .HasColumnType("smallint")
+                    .HasColumnType("int")
                     .ValueGeneratedOnAdd()
                     .IsRequired();
         modelBuilder.Entity<Schedule>()
@@ -160,7 +160,7 @@ public class ApplicationContext : DbContext
                     });
         modelBuilder.Entity<Order>()
                     .Property(u => u.Id)
-                    .HasColumnType("smallint")
+                    .HasColumnType("int")
                     .ValueGeneratedOnAdd()
                     .IsRequired();
         modelBuilder.Entity<Order>()
@@ -181,11 +181,11 @@ public class ApplicationContext : DbContext
                    .IsRequired(false);
         modelBuilder.Entity<Order>()
                   .Property(u => u.Row)
-                  .HasColumnType("int")
+                  .HasColumnType("smallint")
                   .IsRequired();
         modelBuilder.Entity<Order>()
                   .Property(u => u.Column)
-                  .HasColumnType("int")
+                  .HasColumnType("smallint")
                   .IsRequired();
         modelBuilder.Entity<Order>()
                    .Property(u => u.IsPaid)
@@ -199,7 +199,7 @@ public class ApplicationContext : DbContext
                     .HasIndex(u => u.Id);
         modelBuilder.Entity<User>()
                     .Property(u => u.Id)
-                    .HasColumnType("smallint")
+                    .HasColumnType("int")
                     .ValueGeneratedOnAdd()
                     .IsRequired();
         modelBuilder.Entity<User>()
