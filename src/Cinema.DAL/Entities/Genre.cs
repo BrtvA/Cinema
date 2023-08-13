@@ -1,16 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Cinema.DAL.Models.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cinema.DAL.Entities;
 
-public class Genre
+public class Genre : BaseShortModel
 {
     [Required]
-    public int Id { get; set; }
+    public override int Id { get; set; }
     [StringLength(30)]
     [MinLength(2)]
     [Required]
     [RegularExpression("^[А-Яа-яЁё ]+$")]
-    public string Name { get; set; } = null!;
+    public override string Name { get; set; } = null!;
 
     public List<MovieGenre> MovieGenres { get; set; } = new();
 

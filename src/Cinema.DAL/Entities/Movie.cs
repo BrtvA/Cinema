@@ -1,12 +1,9 @@
-﻿namespace Cinema.DAL.Entities;
+﻿using Cinema.DAL.Models.Base;
 
-public class Movie
+namespace Cinema.DAL.Entities;
+
+public class Movie : MovieShortModel
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public string Description { get; set; } = null!;
-    public string ImageName { get; set; } = null!;
-    public int Duration { get; set; } //minutes
     public decimal Price { get; set; }
     public bool IsActual { get; set; }
 

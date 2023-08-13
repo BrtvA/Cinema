@@ -1,9 +1,8 @@
-﻿namespace Cinema.DAL.Entities;
+﻿using Cinema.DAL.Models.Base;
 
-public class UserType
+namespace Cinema.DAL.Entities;
+
+public class UserType : BaseShortModel
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
-
     public List<User> Users { get; set; } = new();
 }
