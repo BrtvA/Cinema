@@ -1,4 +1,4 @@
-﻿namespace Cinema.DAL.Models;
+﻿namespace Cinema.DAL.Models.Base;
 
 public class PositionModel
 {

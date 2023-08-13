@@ -1,5 +1,5 @@
 ﻿using Cinema.DAL.Entities;
-using Cinema.DAL.Models;
+using Cinema.DAL.Models.Base;
 
 namespace Cinema.DAL.Repositories.Interfaces;
 

@@ -1,4 +1,4 @@
-﻿using Cinema.DAL.Models;
+﻿using Cinema.DAL.Models.Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cinema.BLL.DTOs.Request.Attributes;

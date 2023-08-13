@@ -1,5 +1,5 @@
 ﻿using Cinema.BLL.DTOs.Request;
-using Cinema.DAL.Models;
+using Cinema.DAL.Models.Base;
 
 namespace Cinema.BLL.Services.Interfaces;
 

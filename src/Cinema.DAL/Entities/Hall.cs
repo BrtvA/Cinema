@@ -1,9 +1,9 @@
-﻿namespace Cinema.DAL.Entities;
+﻿using Cinema.DAL.Models.Base;
 
-public class Hall
+namespace Cinema.DAL.Entities;
+
+public class Hall : BaseShortModel
 {
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
     public int Rows { get; set; }
     public int Columns { get; set; }
 
