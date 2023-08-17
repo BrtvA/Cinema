@@ -215,7 +215,7 @@ public class ScheduleService : IScheduleService
             if (schedule is null)
             {
                 result = new ServiceResult<string>(
-                    new BadRequestException("Такой записи не существует"));
+                    new NotFoundException("Такой записи не существует"));
             }
             else
             {
