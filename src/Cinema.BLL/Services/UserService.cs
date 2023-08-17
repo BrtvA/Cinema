@@ -75,7 +75,7 @@ public class UserService : IUserService
             else
             {
                 result = new ServiceResult<UserRespDTO>(
-                    new BadRequestException("Неверные данные"));
+                    new BadRequestException("Неверный пароль"));
             }
 
             await transaction.CommitAsync();
