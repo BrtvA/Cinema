@@ -1,12 +1,11 @@
-﻿using Cinema.BLL.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
-namespace Cinema.BLL.Services;
+namespace Cinema.BLL.Services.Additional;
 
 public class FileService : IFileService
 {
     private readonly string _uploadPath;
-    private string FullPath 
+    private string FullPath
     {
         get => $"{_uploadPath}\\{FileName}";
     }
