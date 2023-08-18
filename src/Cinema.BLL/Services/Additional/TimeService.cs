@@ -1,6 +1,6 @@
 ﻿using Cinema.BLL.CustomExceptions;
 
-namespace Cinema.BLL.Services;
+namespace Cinema.BLL.Services.Additional;
 
 internal static class TimeService
 {
@@ -24,7 +24,7 @@ internal static class TimeService
         }
         else
         {
-            return (object)startDate;
+            return startDate;
         }
     }
 }
