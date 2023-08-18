@@ -19,11 +19,11 @@ public class BankAccountService : IBankAccountService
         _bankAccountRepository = unitOfWork.BankAccountRepository;
     }
 
-    public async Task<ServiceResult<string>> BuyAsync(BankAccountReqDTO bankAccountDTO, string url)
+    public async Task<ServiceResult<string>> BuyAsync(
+        BankAccountReqDTO bankAccountDTO, HttpClient client, string action)
     {
-        var client = new HttpClient();
         var buyInfoDTO = await client.GetFromJsonAsync<BuyInfoDTO>(
-            $"{url}/buy-info?guidId={bankAccountDTO.GuidId}&&type=2"
+                $"{action}?guidId={bankAccountDTO.GuidId}&&type=2"
         );
 
         if (buyInfoDTO is null || buyInfoDTO.CardNumber is null)
