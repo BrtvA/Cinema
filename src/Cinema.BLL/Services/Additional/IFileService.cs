@@ -1,4 +1,4 @@
-﻿namespace Cinema.BLL.Services.Interfaces;
+﻿namespace Cinema.BLL.Services.Additional;
 
 internal interface IFileService
 {
