@@ -4,5 +4,6 @@ namespace Cinema.BLL.Services.Interfaces;
 
 public interface IBankAccountService
 {
-    public Task<ServiceResult<string>> BuyAsync(BankAccountReqDTO bankAccountDTO, string url);
+    public Task<ServiceResult<string>> BuyAsync(
+        BankAccountReqDTO bankAccountDTO, HttpClient client, string action);
 }

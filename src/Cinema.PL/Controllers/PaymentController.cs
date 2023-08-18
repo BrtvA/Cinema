@@ -31,7 +31,10 @@ public class PaymentController : Controller
         {
             var result = await _bankAccountService.BuyAsync(
                     bankAccountDTO,
-                    $"{Request.Scheme}://{Request.Host.Value}");
+                    new HttpClient { 
+                        BaseAddress = new Uri($"{Request.Scheme}://{Request.Host.Value}"),
+                    },
+                    "/buy-info");
 
             return result.ToDo((value) =>
             {
