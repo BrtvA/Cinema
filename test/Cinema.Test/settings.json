@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "CinemaDBTest": "Host=localhost;Port=5432;Database=cinemadb_test;User Id=postgres;Password=pgpassword;"
+  }
+}

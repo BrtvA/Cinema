@@ -1,5 +1,6 @@
 ﻿using Cinema.DAL;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Cinema.Test.Infrastructure.Helpers;
 
@@ -10,11 +11,12 @@ internal class ApplicationContextHelper
 
     public ApplicationContextHelper()
     {
-        //builder.UseInMemoryDatabase("cinema_test_db")
-        //    .ConfigureWarnings(x => x.Ignore(InMemoryEventId.TransactionIgnoredWarning));
+        var config = new ConfigurationBuilder()
+                .AddJsonFile("settings.json")
+                .Build();
+
         var builder = new DbContextOptionsBuilder<ApplicationContext>();
-        builder.UseNpgsql("Host=localhost;Port=5432;Database=cinemadb_test;User Id=postgres;Password=pgpassword;");
-        //builder.LogTo(message => System.Diagnostics.Debug.WriteLine(message));
+        builder.UseNpgsql(config.GetSection("ConnectionStrings")["CinemaDBTest"]);
 
         Options = builder.Options;
         Context = new ApplicationContext(Options);
