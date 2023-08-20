@@ -8,7 +8,6 @@ using Cinema.DAL.Models.Base;
 using Cinema.DAL.UnitOfWorks;
 using Cinema.Test.Infrastructure.Helpers;
 using Cinema.Test.Infrastructure.Supports;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Cinema.Test.Tests;
 
@@ -67,7 +66,6 @@ public class ScheduleServiceTests
 
         Assert.IsType<BadRequestException>(result.Exception);
     }
-
     #endregion
 
     #region GetAsync

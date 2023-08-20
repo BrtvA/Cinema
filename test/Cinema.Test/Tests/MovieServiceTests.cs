@@ -133,13 +133,14 @@ public class MovieServiceTests
     //..............Проверка получения информации о фильме и списка залов..............//
 
     private async Task<ServiceResult<MovieHallListRespDTO>> PromtGetDetailsAndHallsAsync(
-        DateTime date, int movieId, int dayVisibilityScope)
+        DateTime date, int movieId)
     {
         HomeInfoReqDTO infoDTO = new HomeInfoReqDTO
         {
             Date = date.ToString("yyyy-MM-dd"),
             MovieId = movieId,
         };
+        int dayVisibilityScope = 14;
 
         return await _movieService.GetDetailsAndHallsAsync(infoDTO, dayVisibilityScope);
     }
@@ -147,11 +148,10 @@ public class MovieServiceTests
     [Fact]
     public async Task GetDetailsAndHallsAsync_HomeInfoReqDTOAndInteger_ResultOk()
     {
-        int dayVisibilityScope = 14;
         var date = DateTime.Now;
         int movieId = 1;
 
-        var result = await PromtGetDetailsAndHallsAsync(date, movieId, dayVisibilityScope);
+        var result = await PromtGetDetailsAndHallsAsync(date, movieId);
 
         Assert.NotNull(result.Value);
     }
@@ -161,11 +161,10 @@ public class MovieServiceTests
     [InlineData(0, 100)]
     public async Task GetDetailsAndHallsAsync_HomeInfoReqDTOAndInteger_ResultNotFoundException(int addedDay, int movieId)
     {
-        int dayVisibilityScope = 14;
         var date = DateTime.Now.AddDays(addedDay);
         string expected = "Данных не найдено";
 
-        var result = await PromtGetDetailsAndHallsAsync(date, movieId, dayVisibilityScope);
+        var result = await PromtGetDetailsAndHallsAsync(date, movieId);
 
         Assert.IsType<NotFoundException>(result.Exception);
         Assert.Equal(expected, result.Error);

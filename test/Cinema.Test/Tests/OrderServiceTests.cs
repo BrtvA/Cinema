@@ -3,7 +3,6 @@ using Cinema.BLL.CustomExceptions;
 using Cinema.BLL.DTOs.Request;
 using Cinema.BLL.Services;
 using Cinema.BLL.Services.Interfaces;
-using Cinema.DAL.Entities;
 using Cinema.DAL.Models.Base;
 using Cinema.DAL.UnitOfWorks;
 using Cinema.Test.Infrastructure.Helpers;
