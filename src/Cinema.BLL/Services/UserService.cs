@@ -38,7 +38,7 @@ public class UserService : IUserService
 
     private static string GetUri(string role) => role switch
     {
-        "Admin" => "/genre",
+        "Admin" => "/schedule",
         _ => "/home"
     };
 
