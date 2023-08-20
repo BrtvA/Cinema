@@ -26,23 +26,27 @@ public class GenreServiceTests
     //..............Проверка создания жанра..............//
     //Добавить проверку выбрасывания исключений
 
-    private async Task<ServiceResult<string>> PromtCreateAsync(string name)
-    {
-        var dto = new GenreReqDTO
-        {
-            Name = name
-        };
+    //private async Task<ServiceResult<string>> PromtCreateAsync(string name)
+    //{
+    //    var dto = new GenreReqDTO
+    //    {
+    //        Name = name
+    //    };
 
-        return await _genreService.CreateAsync(dto);
-    }
+    //    return await _genreService.CreateAsync(dto);
+    //}
 
     [Fact]
     public async Task CreateAsync_GenreReqDTO_ResultOk()
     {
-        string genreName = "Создание";
+        //string genreName = "Создание";
+        var dto = new GenreReqDTO
+        {
+            Name = "Создание"
+        };
         string expected = "Ok";
 
-        var result = await PromtCreateAsync(genreName);
+        var result = await _genreService.CreateAsync(dto);
 
         Assert.Equal(expected, result.Value);
     }
@@ -50,10 +54,14 @@ public class GenreServiceTests
     [Fact]
     public async Task CreateAsync_GenreReqDTO_ResultBadRequestException()
     {
-        string genreName = "Тестовый 1";
+        //string genreName = "Тестовый 1";
+        var dto = new GenreReqDTO
+        {
+            Name = "Тестовый 1"
+        };
         string expected = "Такой жанр уже существует";
 
-        var result = await PromtCreateAsync(genreName);
+        var result = await _genreService.CreateAsync(dto);
 
         Assert.IsType<BadRequestException>(result.Exception);
         Assert.Equal(expected, result.Error);
@@ -83,12 +91,12 @@ public class GenreServiceTests
     //..............Проверка обновления жанров..............//
     //Добавить проверку выбрасывания исключений
 
-    private async Task<ServiceResult<string>> PromtUpdateAsync(int id, string name)
+    private async Task<ServiceResult<string>> PromtUpdateAsync(int id)
     {
         var genre = new Genre
         {
             Id = id,
-            Name = name
+            Name = "Тестовый редактированный"
         };
 
         return await _genreService.UpdateAsync(genre);
@@ -98,10 +106,9 @@ public class GenreServiceTests
     public async Task UpdateAsync_Genre_ResultOk()
     {
         int id = 5;
-        string genreName = "Тестовый редактированный";
         string expected = "Ok";
 
-        var result = await PromtUpdateAsync(id, genreName);
+        var result = await PromtUpdateAsync(id);
 
         Assert.Equal(expected, result.Value);
     }
@@ -110,10 +117,9 @@ public class GenreServiceTests
     public async Task UpdateAsync_Genre_ResultNotFoundException()
     {
         int id = 100;
-        string genreName = "Тестовый редактированный";
         string expected = "Такого жанра не существует";
 
-        var result = await PromtUpdateAsync(id, genreName);
+        var result = await PromtUpdateAsync(id);
 
         Assert.IsType<NotFoundException>(result.Exception);
         Assert.Equal(expected, result.Error);
