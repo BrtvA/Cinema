@@ -16,8 +16,9 @@ internal class TimedHostedOrderCleanService : IHostedService, IDisposable
     private readonly ILogger<TimedHostedOrderCleanService> _logger;
     private readonly IServiceScopeFactory _scopeFactory;
 
-    public TimedHostedOrderCleanService(ILogger<TimedHostedOrderCleanService> logger,
-                                        IServiceScopeFactory scopeFactory)
+    public TimedHostedOrderCleanService(
+        ILogger<TimedHostedOrderCleanService> logger,
+        IServiceScopeFactory scopeFactory)
     {
         _logger = logger;
         _scopeFactory = scopeFactory;
@@ -27,27 +28,19 @@ internal class TimedHostedOrderCleanService : IHostedService, IDisposable
             .Build();
         RESTART_PERIOD = int.Parse(config
             .GetSection("AppSettings")
-            .GetSection("Additional")["CleaningRestartPeriod"] ?? "2");
+            .GetSection("Additional")["CleaningRestartPeriod"] ?? "1");
         ACTUALITY_PERIOD = int.Parse(config
             .GetSection("AppSettings")
-            .GetSection("Additional")["CleaningActualityPeriod"] ?? "2");
+            .GetSection("Additional")["CleaningActualityPeriod"] ?? "1");
     }
-
-    //private readonly DbContextOptions<ApplicationContext> _dbContextOptions;
-
-    //public TimedHostedOrderCleanService(ILogger<TimedHostedOrderCleanService> logger,
-    //                                    DbContextOptions<ApplicationContext> dbContextOptions)
-    //{
-    //    _logger = logger;
-    //    _dbContextOptions = dbContextOptions;
-    //}
 
     public Task StartAsync(CancellationToken stoppingToken)
     {
         _logger.LogInformation("Сервис очистки устаревших заказов запущен");
 
-        _timer = new Timer(DoWork, null, TimeSpan.Zero,
-                           TimeSpan.FromMinutes(RESTART_PERIOD));
+        _timer = new Timer(
+            DoWork, null, TimeSpan.Zero,
+            TimeSpan.FromMinutes(RESTART_PERIOD));
 
         return Task.CompletedTask;
     }
@@ -80,56 +73,27 @@ internal class TimedHostedOrderCleanService : IHostedService, IDisposable
                         await transaction.CommitAsync();
 
                         _logger.LogInformation(
-                             $"{DateTime.Now}: Запуск сервиса очистки. Номер запуска: {count}. Удалено: {deletedCount}"
-                        );
+                             "{DateTime}: Запуск сервиса очистки. Номер запуска: {Count}. Удалено: {DeletedCount}",
+                             DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy"), count, deletedCount);
                     }
-                    catch
+                    catch(Exception ex)
                     {
                         await transaction.RollbackAsync();
-                        throw;
+                        _logger.LogError(
+                            "{DateTime}: Ошибка работы сервиса очистки\n{Message}",
+                            DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy"),
+                            $"{ex.Message}\n{ex.StackTrace}");
                     }
                 }
             }
             else
             {
-                _logger.LogError($"{DateTime.Now}: Невозможность запуска сервиса очистки");
+                _logger.LogError(
+                    "{DateTime}: Невозможность запуска сервиса очистки",
+                    DateTime.Now.ToString("HH:mm:ss dd.MM.yyyy"));
             }
         }
     }
-
-    //private async void DoWork(object? state)
-    //{
-    //    var count = Interlocked.Increment(ref _executionCount);
-
-    //    using (var scope = _scopeFactory.CreateScope())
-    //    {
-    //        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-    //        var orderRepository = new OrderRepository(dbContext);
-
-    //        using var transaction = await dbContext.Database.BeginTransactionAsync();
-
-    //        try
-    //        {
-    //            var orders = await orderRepository.ListByTimeAsync(START_TIME);
-    //            int deletedCount = orders.Count();
-    //            if (deletedCount > 0)
-    //            {
-    //                orderRepository.Delete(orders);
-    //                await orderRepository.SaveAsync();
-    //            }
-    //            await transaction.CommitAsync();
-
-    //            _logger.LogInformation(
-    //                 $"{DateTime.Now}: Запуск сервиса очистки. Номер запуска: {count}. Удалено: {deletedCount}"
-    //            );
-    //        }
-    //        catch
-    //        {
-    //            await transaction.RollbackAsync();
-    //            throw;
-    //        }
-    //    }
-    //}
 
     public Task StopAsync(CancellationToken stoppingToken)
     {
@@ -143,6 +107,5 @@ internal class TimedHostedOrderCleanService : IHostedService, IDisposable
     public void Dispose()
     {
         _timer?.Dispose();
-        //_db.Dispose();
     }
 }

@@ -70,7 +70,9 @@ internal class ExceptionHandingMiddleware
                                             HttpStatusCode httpStatusCode,
                                             string message)
     {
-        _logger.LogError($"{DateTime.Now}: {exMsg}");
+        _logger.LogError(
+            "{DateTime}: {Message}", DateTime.Now, exMsg
+        );
 
         HttpResponse response = context.Response;
         response.ContentType = "text/html";
