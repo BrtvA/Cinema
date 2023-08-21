@@ -35,6 +35,9 @@ internal class ApplicationContextHelper
 
             Context.Orders.AddRange(DataHelper.OrderList);
             Context.SaveChanges();
+
+            Context.Users.Add(DataHelper.User);
+            Context.SaveChanges();
         }
     }
 }

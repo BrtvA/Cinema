@@ -1,4 +1,6 @@
-﻿using Cinema.DAL.Entities;
+﻿using Cinema.DAL;
+using Cinema.DAL.Entities;
+using Cinema.DAL.Enum;
 
 namespace Cinema.Test.Infrastructure.Helpers;
 
@@ -67,5 +69,16 @@ public class DataHelper
                 Column = num,
             });
         } 
+    }
+
+    public static User User
+    {
+        get => new User
+        {
+            Email = "second@yandex.ru",
+            UserTypeId = (int)UserTypeEnum.Customer,
+            Password = Hasher.HashPassword("1234"),
+            Name = "user",
+        };
     }
 }
