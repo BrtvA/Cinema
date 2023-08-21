@@ -80,6 +80,10 @@ public class ApplicationContext : DbContext
                     .HasColumnType("varchar(50)")
                     .IsRequired();
         modelBuilder.Entity<Movie>()
+                    .Property(m => m.Duration)
+                    .HasColumnType("smallint")
+                    .IsRequired();
+        modelBuilder.Entity<Movie>()
                     .Property(m => m.Price)
                     .HasColumnType("money")
                     .IsRequired();
