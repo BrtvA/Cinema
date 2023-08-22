@@ -6,7 +6,6 @@ using Cinema.BLL.Services.Interfaces;
 using Cinema.DAL.Models.Base;
 using Cinema.DAL.UnitOfWorks;
 using Cinema.Test.Infrastructure.Helpers;
-using Cinema.Test.Infrastructure.Supports;
 
 namespace Cinema.Test.Tests;
 
@@ -15,7 +14,7 @@ public class OrderServiceTests
 {
     private readonly IOrderService _orderService;
 
-    public OrderServiceTests(DatabaseFixture fixture)
+    public OrderServiceTests()
     {
         var contextHelper = new ApplicationContextHelper();
         IUnitOfWork unitOfWork = new UnitOfWork(contextHelper.Options);

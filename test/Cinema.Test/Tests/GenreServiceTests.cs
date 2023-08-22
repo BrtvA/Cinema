@@ -6,7 +6,6 @@ using Cinema.BLL.Services.Interfaces;
 using Cinema.DAL.Entities;
 using Cinema.DAL.UnitOfWorks;
 using Cinema.Test.Infrastructure.Helpers;
-using Cinema.Test.Infrastructure.Supports;
 
 namespace Cinema.Test.Tests;
 
@@ -15,7 +14,7 @@ public class GenreServiceTests
 {
     private readonly IGenreService _genreService;
 
-    public GenreServiceTests(DatabaseFixture fixture)
+    public GenreServiceTests()
     {
         var contextHelper = new ApplicationContextHelper();
         IUnitOfWork unitOfWork = new UnitOfWork(contextHelper.Options);
@@ -26,20 +25,9 @@ public class GenreServiceTests
     //..............Проверка создания жанра..............//
     //Добавить проверку выбрасывания исключений
 
-    //private async Task<ServiceResult<string>> PromtCreateAsync(string name)
-    //{
-    //    var dto = new GenreReqDTO
-    //    {
-    //        Name = name
-    //    };
-
-    //    return await _genreService.CreateAsync(dto);
-    //}
-
     [Fact]
     public async Task CreateAsync_GenreReqDTO_ResultOk()
     {
-        //string genreName = "Создание";
         var dto = new GenreReqDTO
         {
             Name = "Создание"
@@ -54,7 +42,6 @@ public class GenreServiceTests
     [Fact]
     public async Task CreateAsync_GenreReqDTO_ResultBadRequestException()
     {
-        //string genreName = "Тестовый 1";
         var dto = new GenreReqDTO
         {
             Name = "Тестовый 1"
