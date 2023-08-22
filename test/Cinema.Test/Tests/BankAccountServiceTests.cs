@@ -5,7 +5,6 @@ using Cinema.BLL.Services;
 using Cinema.BLL.Services.Interfaces;
 using Cinema.DAL.UnitOfWorks;
 using Cinema.Test.Infrastructure.Helpers;
-using Cinema.Test.Infrastructure.Supports;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace Cinema.Test.Tests;
@@ -15,7 +14,7 @@ public class BankAccountServiceTests
 {
     private readonly IBankAccountService _bankAccountService;
 
-    public BankAccountServiceTests(DatabaseFixture fixture)
+    public BankAccountServiceTests()
     {
         var contextHelper = new ApplicationContextHelper();
         IUnitOfWork unitOfWork = new UnitOfWork(contextHelper.Options);

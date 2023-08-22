@@ -4,7 +4,6 @@ using Cinema.BLL.Services;
 using Cinema.BLL.Services.Interfaces;
 using Cinema.DAL.UnitOfWorks;
 using Cinema.Test.Infrastructure.Helpers;
-using Cinema.Test.Infrastructure.Supports;
 
 namespace Cinema.Test.Tests;
 
@@ -13,7 +12,7 @@ public class UserServiceTests
 {
     private readonly IUserService _userService;
 
-    public UserServiceTests(DatabaseFixture fixture)
+    public UserServiceTests()
     {
         var contextHelper = new ApplicationContextHelper();
         IUnitOfWork unitOfWork = new UnitOfWork(contextHelper.Options);
@@ -25,13 +24,15 @@ public class UserServiceTests
     //Добавить проверку выбрасывания исключений
     //Добавить проверку NotFoundException для userType
 
-    [Fact]
-    public async Task LoginAsync_LoginReqDTO_ResultOk()
+    [Theory]
+    [InlineData("cinema@yandex.ru", "1234")]
+    [InlineData("second@yandex.ru", "1234")]
+    public async Task LoginAsync_LoginReqDTO_ResultOk(string email, string password)
     {
         var dto = new LoginReqDTO
         {
-            Email = "cinema@yandex.ru",
-            Password = "1234"
+            Email = email,
+            Password = password
         };
 
         var result = await _userService.LoginAsync(dto);
