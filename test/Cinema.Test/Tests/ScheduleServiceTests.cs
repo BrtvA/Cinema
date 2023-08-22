@@ -7,7 +7,6 @@ using Cinema.BLL.Services.Interfaces;
 using Cinema.DAL.Models.Base;
 using Cinema.DAL.UnitOfWorks;
 using Cinema.Test.Infrastructure.Helpers;
-using Cinema.Test.Infrastructure.Supports;
 
 namespace Cinema.Test.Tests;
 
@@ -16,7 +15,7 @@ public class ScheduleServiceTests
 {
     private readonly IScheduleService _scheduleService;
 
-    public ScheduleServiceTests(DatabaseFixture fixture)
+    public ScheduleServiceTests()
     {
         var contextHelper = new ApplicationContextHelper();
         IUnitOfWork unitOfWork = new UnitOfWork(contextHelper.Options);
