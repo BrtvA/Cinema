@@ -27,6 +27,32 @@ public class ScheduleService : IScheduleService
         _scheduleRepository = unitOfWork.ScheduleRepository;
     }
 
+    private async Task<object> CheckDTOAsync(ScheduleReqDTO scheduleDTO, DateTime? startTime = null)
+    {
+        var movie = await _movieRepository.GetAsync(scheduleDTO.MovieId);
+        if (movie is null)
+        {
+            return new BadRequestException("Такого фильма не существует");
+        }
+
+        var hall = await _hallRepository.GetAsync(scheduleDTO.HallId);
+        if (hall is null)
+        {
+            return new BadRequestException("Такого зала не существует");
+        }
+
+        var schedules = await _scheduleRepository.GetByFilterAsync(
+                        scheduleDTO.HallId,
+                        scheduleDTO.StartTime,
+                        scheduleDTO.StartTime.AddMinutes(movie.Duration));
+        if (schedules is not null && scheduleDTO.StartTime != startTime)
+        {
+            return new BadRequestException("В данное время уже есть киносеанс");
+        }
+
+        return "Ok";
+    }
+
     public async Task<ServiceResult<string>> CreateAsync(ScheduleReqDTO scheduleDTO)
     {
         using var transaction = await _unitOfWork.BeginTransactionAsync();
@@ -34,43 +60,23 @@ public class ScheduleService : IScheduleService
         try
         {
             ServiceResult<string> result;
-            var movie = await _movieRepository.GetAsync(scheduleDTO.MovieId);
-            var hall = await _hallRepository.GetAsync(scheduleDTO.HallId);
 
-            if (movie is null)
+            var checkResult = await CheckDTOAsync(scheduleDTO);
+            if (checkResult is BadRequestException ex)
             {
-                result = new ServiceResult<string>(
-                    new BadRequestException("Такого фильма не существует"));
-            }
-            else if (hall is null)
-            {
-                result = new ServiceResult<string>(
-                    new BadRequestException("Такого зала не существует"));
+                result = new ServiceResult<string>(ex);
             }
             else
             {
-                var schedules = await _scheduleRepository.GetByFilterAsync(
-                        scheduleDTO.HallId,
-                        scheduleDTO.StartTime,
-                        scheduleDTO.StartTime.AddMinutes(movie.Duration));
-
-                if (schedules is not null)
+                await _scheduleRepository.CreateAsync(new Schedule
                 {
-                    result = new ServiceResult<string>(
-                        new BadRequestException("В данное время уже есть киносеанс"));
-                }
-                else
-                {
-                    await _scheduleRepository.CreateAsync(new Schedule
-                    {
-                        MovieId = scheduleDTO.MovieId,
-                        HallId = scheduleDTO.HallId,
-                        StartTime = scheduleDTO.StartTime,
-                    });
-                    await _unitOfWork.SaveAsync();
+                    MovieId = scheduleDTO.MovieId,
+                    HallId = scheduleDTO.HallId,
+                    StartTime = scheduleDTO.StartTime,
+                });
+                await _unitOfWork.SaveAsync();
 
-                    result = new ServiceResult<string>("Ok");
-                }
+                result = new ServiceResult<string>("Ok");
             }
 
             await transaction.CommitAsync();
@@ -212,6 +218,7 @@ public class ScheduleService : IScheduleService
         try
         {
             ServiceResult<string> result;
+
             var schedule = await _scheduleRepository.GetAsync(scheduleDTO.Id);
             if (schedule is null)
             {
@@ -220,16 +227,24 @@ public class ScheduleService : IScheduleService
             }
             else
             {
-                schedule.MovieId = scheduleDTO.MovieId;
-                schedule.HallId = scheduleDTO.HallId;
-                schedule.StartTime = scheduleDTO.StartTime;
+                var checkResult = await CheckDTOAsync(scheduleDTO, schedule.StartTime);
+                if (checkResult is BadRequestException ex)
+                {
+                    result = new ServiceResult<string>(ex);
+                }
+                else
+                {
+                    schedule.MovieId = scheduleDTO.MovieId;
+                    schedule.HallId = scheduleDTO.HallId;
+                    schedule.StartTime = scheduleDTO.StartTime;
 
-                _scheduleRepository.Update(schedule);
-                await _unitOfWork.SaveAsync();
+                    _scheduleRepository.Update(schedule);
+                    await _unitOfWork.SaveAsync();
 
-                result = new ServiceResult<string>("Ok");
+                    result = new ServiceResult<string>("Ok");
+                }
             }
-
+            
             await transaction.CommitAsync();
             return result;
         }
