@@ -35,17 +35,21 @@ public class DataHelper
         new MovieGenre { MovieId = 4, GenreId = 2 },
     };
 
-    public static IEnumerable<Schedule> ScheduleList 
-    { 
-        get {
-            var date = DateTime.Now;
-            return Enumerable.Range(1, 5).Select(s => new Schedule
+    public static IEnumerable<Schedule> ScheduleList
+    {
+        get
+        {
+            var currentDate = DateTime.Now;
+            var date = new DateTime(
+                    currentDate.Year, currentDate.Month, currentDate.Day, 
+                    8, 0, 0);
+            return Enumerable.Range(1, 10).Select(s => new Schedule
             {
                 MovieId = 1,
                 HallId = 1,
-                StartTime = date.AddMinutes((s - 1) * 10),
+                StartTime = date.AddHours(s-1),
             });
-        } 
+        }
     }
 
     public static IEnumerable<Order> OrderList 
@@ -73,7 +77,7 @@ public class DataHelper
 
     public static User User
     {
-        get => new User
+        get => new()
         {
             Email = "second@yandex.ru",
             UserTypeId = (int)UserTypeEnum.Customer,
