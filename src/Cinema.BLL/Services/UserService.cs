@@ -59,18 +59,11 @@ public class UserService : IUserService
             else if (user.Email == loginDTO.Email && user.Password == Hasher.HashPassword(loginDTO.Password))
             {
                 var userType = await _userTypeRepository.GetAsync(user.UserTypeId);
-                if (userType is null)
-                {
-                    result = new ServiceResult<UserRespDTO>(
-                        new NotFoundException("Пользователь не найден"));
-                }
-                else
-                {
-                    result = new ServiceResult<UserRespDTO>(
-                        new UserRespDTO(GetClaimsIdentity(
+                result = new ServiceResult<UserRespDTO>(
+                        new UserRespDTO(
+                            GetClaimsIdentity(
                                 loginDTO.Email, userType.Name),
-                                GetUri(userType.Name)));
-                }
+                            GetUri(userType.Name)));
             }
             else
             {
