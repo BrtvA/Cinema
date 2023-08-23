@@ -53,13 +53,16 @@ public class ScheduleServiceTests
     }
 
     [Theory]
-    [InlineData(100, 1)]
-    [InlineData(1, 100)]
-    [InlineData(1, 1)]
+    [InlineData(100, 1, 9)]
+    [InlineData(1, 100, 9)]
+    [InlineData(1, 1, 9)]
     public async Task CreateAsync_ScheduleReqDTO_ResultBadRequestException(
-        int movieId, int hallId)
+        int movieId, int hallId, int hour)
     {
-        DateTime startTime = DateTime.Now.AddMinutes(1);
+        var currentDate = DateTime.Now;
+        var startTime = new DateTime(
+                currentDate.Year, currentDate.Month, currentDate.Day,
+                hour, 0, 0);
 
         var result = await PromtCreateAsync(movieId, hallId, startTime);
 
@@ -112,11 +115,12 @@ public class ScheduleServiceTests
             reductionBoundaryTime, multiplyingBoundaryTime);
     }
 
-    [Fact]
-    public async Task GetPriceAsync_IntegersAndDecimals_ResultOk()
+    [Theory]
+    [InlineData(1)]
+    [InlineData(5)]
+    [InlineData(10)]
+    public async Task GetPriceAsync_IntegersAndDecimals_ResultOk(int id)
     {
-        int id = 1;
-
         var result = await PromtGetPriceAsync(id);
 
         Assert.IsType<decimal>(result.Value);
@@ -254,14 +258,15 @@ public class ScheduleServiceTests
     //..............Проверка списка афиши..............//
     //Добавить проверку выбрасывания исключений
 
-    private async Task<ServiceResult<string>> PromtUpdateAsync(int id)
+    private async Task<ServiceResult<string>> PromtUpdateAsync(
+        int id, int movieId, int hallId, DateTime startTime)
     {
         var dto = new ScheduleReqDTO
         {
             Id = id,
-            MovieId = 1,
-            HallId = 2,
-            StartTime = DateTime.Now,
+            MovieId = movieId,
+            HallId = hallId,
+            StartTime = startTime,
         };
 
         return await _scheduleService.UpdateAsync(dto);
@@ -271,9 +276,13 @@ public class ScheduleServiceTests
     public async Task UpdateAsync_AdminScheduleReqDTOAndInteger_ResultOk()
     {
         int id = 4;
+        int movieId = 1;
+        int hallId = 2;
+        var startTime  = DateTime.Now;
         string expected = "Ok";
 
-        var result = await PromtUpdateAsync(id);
+        var result = await PromtUpdateAsync(
+                id, movieId, hallId, startTime);
 
         Assert.Equal(expected, result.Value);
     }
@@ -282,12 +291,33 @@ public class ScheduleServiceTests
     public async Task UpdateAsync_AdminScheduleReqDTOAndInteger_ResultNotFoundException()
     {
         int id = 100;
+        int movieId = 1;
+        int hallId = 2;
+        var startTime = DateTime.Now;
+        
         string expected = "Такой записи не существует";
 
-        var result = await PromtUpdateAsync(id);
+        var result = await PromtUpdateAsync(id, movieId, hallId, startTime);
 
         Assert.IsType<NotFoundException>(result.Exception);
         Assert.Equal(expected, result.Error);
+    }
+
+    [Theory]
+    [InlineData(1, 100, 2, 9)]
+    [InlineData(1, 1, 100, 9)]
+    [InlineData(1, 1, 1, 9)]
+    public async Task UpdateAsync_AdminScheduleReqDTOAndInteger_ResultBadRequestException(
+        int id, int movieId, int hallId, int hour)
+    {
+        var currentDate = DateTime.Now;
+        var startTime = new DateTime(
+                currentDate.Year, currentDate.Month, currentDate.Day,
+                hour, 0, 0);
+
+        var result = await PromtUpdateAsync(id, movieId, hallId, startTime);
+
+        Assert.IsType<BadRequestException>(result.Exception);
     }
     #endregion
 

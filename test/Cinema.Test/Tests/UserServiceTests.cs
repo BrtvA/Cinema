@@ -22,7 +22,6 @@ public class UserServiceTests
     #region LoginAsync
     //..............Проверка логина..............//
     //Добавить проверку выбрасывания исключений
-    //Добавить проверку NotFoundException для userType
 
     [Theory]
     [InlineData("cinema@yandex.ru", "1234")]
