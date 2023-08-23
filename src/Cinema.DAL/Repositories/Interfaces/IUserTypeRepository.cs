@@ -4,5 +4,5 @@ namespace Cinema.DAL.Repositories.Interfaces;
 
 public interface IUserTypeRepository
 {
-    public Task<UserType?> GetAsync(int id);
+    public Task<UserType> GetAsync(int id);
 }

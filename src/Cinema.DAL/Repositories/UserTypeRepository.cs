@@ -13,8 +13,8 @@ public class UserTypeRepository : IUserTypeRepository
         _db = applicationContext;
     }
 
-    public async Task<UserType?> GetAsync(int id)
+    public async Task<UserType> GetAsync(int id)
     {
-        return await _db.UserTypes.FirstOrDefaultAsync(ut => ut.Id == id);
+        return await _db.UserTypes.FirstAsync(ut => ut.Id == id);
     }
 }
