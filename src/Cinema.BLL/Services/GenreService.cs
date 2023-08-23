@@ -52,15 +52,12 @@ public class GenreService : IGenreService
     public async Task<ServiceResult<GenreListRespDTO>> ListAsync(int page, int pageSize)
     {
         var genres = await _genreRepository.ListAsync(pageSize * (page - 1), pageSize);
-        if (genres is not null)
-        {
-            int count = await _genreRepository.GetCountAsync();
-            bool nextPageExist = (pageSize * page) < count;
-            return new ServiceResult<GenreListRespDTO>(
-                new GenreListRespDTO(genres, nextPageExist));
-        }
+
+        int count = await _genreRepository.GetCountAsync();
+        bool nextPageExist = (pageSize * page) < count;
+
         return new ServiceResult<GenreListRespDTO>(
-            new NotFoundException("Список жанров не найден"));
+            new GenreListRespDTO(genres, nextPageExist));
     }
 
     public async Task<ServiceResult<string>> UpdateAsync(Genre genreDTO)
