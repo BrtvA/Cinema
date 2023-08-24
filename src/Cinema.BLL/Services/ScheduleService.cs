@@ -17,6 +17,7 @@ public class ScheduleService : IScheduleService
     private readonly IMovieRepository _movieRepository;
     private readonly IHallRepository _hallRepository;
     private readonly IScheduleRepository _scheduleRepository;
+    private readonly IOrderRepository _orderRepository;
 
     public ScheduleService(IUnitOfWork unitOfWork)
     {
@@ -25,6 +26,7 @@ public class ScheduleService : IScheduleService
         _movieRepository = unitOfWork.MovieRepository;
         _hallRepository = unitOfWork.HallRepository;
         _scheduleRepository = unitOfWork.ScheduleRepository;
+        _orderRepository = unitOfWork.OrderRepository;
     }
 
     private async Task<object> CheckDTOAsync(ScheduleReqDTO scheduleDTO, DateTime? startTime = null)
@@ -270,12 +272,17 @@ public class ScheduleService : IScheduleService
                 result = new ServiceResult<string>(
                     new NotFoundException("Такой записи не существует"));
             }
-            else
+            else if (!await _orderRepository.ExistByScheduleId(id))
             {
                 _scheduleRepository.Delete(schedule);
                 await _unitOfWork.SaveAsync();
 
                 result = new ServiceResult<string>("Ok");
+            }
+            else
+            {
+                result = new ServiceResult<string>(
+                    new BadRequestException("Данная запись используется"));
             }
 
             await transaction.CommitAsync();

@@ -57,6 +57,11 @@ public class OrderRepository: IOrderRepository
             .ToListAsync();
     }
 
+    public async Task<bool> ExistByScheduleId(int scheduleId)
+    {
+        return await OrderFilteredByScheduleId(scheduleId).AnyAsync();
+    }
+
     public async Task<IEnumerable<Order>> ListByTimeAsync(int minutes)
     {
         return await _db.Orders
