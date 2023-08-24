@@ -23,6 +23,11 @@ public class MovieGenreRepository : IMovieGenreRepository
         return await _db.MovieGenres.Where(mg => mg.MovieId == movieId).ToListAsync();
     }
 
+    public async Task<bool> ExistByGenreIdAsync(int genreId)
+    {
+        return await _db.MovieGenres.Where(mg => mg.GenreId == genreId).AnyAsync();
+    }
+
     public void Delete(IEnumerable<MovieGenre> movieGenreList)
     {
         _db.MovieGenres.RemoveRange(movieGenreList);
