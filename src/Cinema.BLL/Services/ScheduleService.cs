@@ -55,6 +55,12 @@ public class ScheduleService : IScheduleService
 
     public async Task<ServiceResult<string>> CreateAsync(ScheduleReqDTO scheduleDTO)
     {
+        if (scheduleDTO.StartTime.Date < DateTime.Now.Date)
+        {
+            return new ServiceResult<string>(
+                new BadRequestException("Нельзя создать сеанс в прошлом"));
+        }
+
         using var transaction = await _unitOfWork.BeginTransactionAsync();
 
         try
@@ -159,6 +165,29 @@ public class ScheduleService : IScheduleService
             new ScheduleGenreListRespDTO(schedules, genres, nextPageExist));
     }
 
+    public async Task<ServiceResult<ScheduleHallMovieGenreListRespDTO>> ListAsync(
+        AdminScheduleReqDTO scheduleDTO, int pageSize)
+    {
+        var genres = await _genreRepository.ListAsync();
+        var movies = await _movieRepository.ListActualAsync();
+        var halls = await _hallRepository.ListInfoAsync();
+
+        var startDate = TimeService.CheckDate(scheduleDTO.Date);
+        scheduleDTO.Date = startDate.ToString("yyyy-MM-dd");
+
+        var schedules = await _scheduleRepository.ListAsync(
+                pageSize * (scheduleDTO.Page - 1), pageSize,
+                scheduleDTO.GenresId, scheduleDTO.HallId, startDate);
+        int count = await _scheduleRepository.GetCountAsync(
+                scheduleDTO.GenresId, scheduleDTO.HallId, startDate);
+
+        bool nextPageExist = (pageSize * scheduleDTO.Page) < count;
+
+        return new ServiceResult<ScheduleHallMovieGenreListRespDTO>(
+            new ScheduleHallMovieGenreListRespDTO(
+                schedules, halls, movies, genres, nextPageExist));
+    }
+
     public async Task<ServiceResult<IEnumerable<BaseShortModel>>> ListTimeAsync(
         HomeTimeReqDTO timeDTO, int dayShift)
     {
@@ -182,33 +211,6 @@ public class ScheduleService : IScheduleService
 
         return new ServiceResult<IEnumerable<BaseShortModel>>(
             new NotFoundException("Кинопоказы в данном зале отсутствуют"));
-    }
-
-    public async Task<ServiceResult<ScheduleHallMovieGenreListRespDTO>> ListAsync(
-        AdminScheduleReqDTO scheduleDTO, int pageSize)
-    {
-        var genres = await _genreRepository.ListAsync();
-        var movies = await _movieRepository.ListActualAsync();
-        var halls = await _hallRepository.ListInfoAsync();
-
-        scheduleDTO.Date ??= "";
-
-        DateTime startDate = DateTime.ParseExact(
-            scheduleDTO.Date == "" ? "9999-12-31" : scheduleDTO.Date,
-            "yyyy-MM-dd",
-            System.Globalization.CultureInfo.InvariantCulture);
-
-        var schedules = await _scheduleRepository.ListAsync(
-                pageSize * (scheduleDTO.Page - 1), pageSize, 
-                scheduleDTO.GenresId, scheduleDTO.HallId, startDate);
-        int count = await _scheduleRepository.GetCountAsync(
-                scheduleDTO.GenresId, scheduleDTO.HallId, startDate);
-
-        bool nextPageExist = (pageSize * scheduleDTO.Page) < count;
-
-        return new ServiceResult<ScheduleHallMovieGenreListRespDTO>(
-            new ScheduleHallMovieGenreListRespDTO(
-                schedules, halls, movies, genres, nextPageExist));
     }
 
     public async Task<ServiceResult<string>> UpdateAsync(ScheduleReqDTO scheduleDTO)

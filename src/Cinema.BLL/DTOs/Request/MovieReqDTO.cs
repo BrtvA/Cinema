@@ -7,7 +7,7 @@ namespace Cinema.BLL.DTOs.Request;
 public class MovieReqDTO
 {
     [Required]
-    [Range(1, int.MaxValue)]
+    [Range(-1, int.MaxValue)]
     public int Id { get; set; }
     [StringLength(50)]
     [MinLength(1)]
