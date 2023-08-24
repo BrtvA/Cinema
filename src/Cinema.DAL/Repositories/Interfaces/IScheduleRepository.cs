@@ -26,6 +26,8 @@ public interface IScheduleRepository
 
     public Task<int> GetCountAsync(int[]? genresId, int hallId, DateTime startDate);
 
+    public Task<bool> ExistByMovieIdAsync(int movieId);
+
     public void Update(Schedule schedule);
 
     public void Delete(Schedule schedule);

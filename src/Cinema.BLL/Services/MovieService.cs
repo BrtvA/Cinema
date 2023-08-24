@@ -17,6 +17,7 @@ public class MovieService : IMovieService
     private readonly IMovieGenreRepository _movieGenreRepository;
     private readonly IGenreRepository _genreRepository;
     private readonly IHallRepository _hallRepository;
+    private readonly IScheduleRepository _scheduleRepository;
 
     public MovieService(IUnitOfWork unitOfWork)
     {
@@ -25,6 +26,7 @@ public class MovieService : IMovieService
         _movieGenreRepository = unitOfWork.MovieGenreRepository;
         _genreRepository = unitOfWork.GenreRepository;
         _hallRepository = unitOfWork.HallRepository;
+        _scheduleRepository = unitOfWork.ScheduleRepository;
     }
 
     public async Task<ServiceResult<string>> CreateAsync(MovieReqDTO movieDTO, string uploadPath)
@@ -227,7 +229,7 @@ public class MovieService : IMovieService
                 result = new ServiceResult<string>(
                     new NotFoundException("Такого фильма не существует"));
             }
-            else
+            else if (!await _scheduleRepository.ExistByMovieIdAsync(id))
             {
                 string fileName = movie.ImageName;
                 _movieRepository.Delete(movie);
@@ -238,6 +240,12 @@ public class MovieService : IMovieService
 
                 result = new ServiceResult<string>("Ok");
             }
+            else
+            {
+                result = new ServiceResult<string>(
+                    new BadRequestException("Данный фильм используется"));
+            }
+
             await transaction.CommitAsync();
             return result;
         }
