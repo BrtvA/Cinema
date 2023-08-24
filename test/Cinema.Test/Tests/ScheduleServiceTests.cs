@@ -349,5 +349,17 @@ public class ScheduleServiceTests
         Assert.IsType<NotFoundException>(result.Exception);
         Assert.Equal(expected, result.Error);
     }
+
+    [Fact]
+    public async Task DeleteAsync_Integer_ResultBadRequestException()
+    {
+        int id = 1;
+        string expected = "Данная запись используется";
+
+        var result = await _scheduleService.DeleteAsync(id);
+
+        Assert.IsType<BadRequestException>(result.Exception);
+        Assert.Equal(expected, result.Error);
+    }
     #endregion
 }
