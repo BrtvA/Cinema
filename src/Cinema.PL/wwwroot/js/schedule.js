@@ -20,7 +20,7 @@ function changeFormType(formId, btnId, actionType) {
 $(document).ready(function () {
     /*Кнопка уведомления при создании фильма*/
     $("#noticeBtn").on("click", function () {
-        alert("Прежде добавте фильмы в прокат");
+        alert("Прежде добавьте фильмы в прокат");
     });
 
 
