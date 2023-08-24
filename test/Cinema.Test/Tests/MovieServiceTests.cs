@@ -286,5 +286,19 @@ public class MovieServiceTests
         Assert.IsType<NotFoundException>(result.Exception);
         Assert.Equal(expected, result.Error);
     }
+
+    [Fact]
+    public async Task DeleteAsync_IntegerAndString_ResultBadRequestException()
+    {
+        Assert.NotNull(_pathToSave);
+
+        int id = 1;
+        string expected = "Данный фильм используется";
+
+        var result = await _movieService.DeleteAsync(id, _pathToSave);
+
+        Assert.IsType<BadRequestException>(result.Exception);
+        Assert.Equal(expected, result.Error);
+    }
     #endregion
 }

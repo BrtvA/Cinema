@@ -124,6 +124,11 @@ public class ScheduleRepository : IScheduleRepository
         return await SchedulesData(genresId, hallId, startDate).CountAsync();
     }
 
+    public async Task<bool> ExistByMovieIdAsync(int movieId)
+    {
+        return await _db.Schedules.Where(s => s.MovieId == movieId).AnyAsync();
+    }
+
     public void Update(Schedule schedule)
     {
         _db.Schedules.Update(schedule);
