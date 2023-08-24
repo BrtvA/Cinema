@@ -53,15 +53,17 @@ public class ScheduleServiceTests
     }
 
     [Theory]
-    [InlineData(100, 1, 9)]
-    [InlineData(1, 100, 9)]
-    [InlineData(1, 1, 9)]
+    [InlineData(100, 1, 9, false)]
+    [InlineData(1, 100, 9, false)]
+    [InlineData(1, 1, 9, false)]
+    [InlineData(1, 1, 9, true)]
     public async Task CreateAsync_ScheduleReqDTO_ResultBadRequestException(
-        int movieId, int hallId, int hour)
+        int movieId, int hallId, int hour, bool inPast)
     {
         var currentDate = DateTime.Now;
         var startTime = new DateTime(
-                currentDate.Year, currentDate.Month, currentDate.Day,
+                currentDate.Year, currentDate.Month, 
+                inPast ? currentDate.Day - 1 : currentDate.Day,
                 hour, 0, 0);
 
         var result = await PromtCreateAsync(movieId, hallId, startTime);

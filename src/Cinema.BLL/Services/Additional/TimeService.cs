@@ -4,19 +4,23 @@ namespace Cinema.BLL.Services.Additional;
 
 internal static class TimeService
 {
-    public static object CheckStartTime(string date, int dateShift)
+    public static DateTime CheckDate(string date)
     {
-        DateTime currentDate = DateTime.Now.Date;
-        DateTime startDate;
         if (date is null || date == "")
         {
-            startDate = currentDate;
+            return DateTime.Now.Date;
         }
         else
         {
-            startDate = DateTime.ParseExact(date, "yyyy-MM-dd",
+            return DateTime.ParseExact(date, "yyyy-MM-dd",
                 System.Globalization.CultureInfo.InvariantCulture);
         }
+    }
+
+    public static object CheckStartTime(string date, int dateShift)
+    {
+        DateTime currentDate = DateTime.Now.Date;
+        DateTime startDate = CheckDate(date);
 
         if (startDate < currentDate || startDate > currentDate.AddDays(dateShift))
         {

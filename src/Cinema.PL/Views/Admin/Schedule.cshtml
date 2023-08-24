@@ -37,14 +37,17 @@
                                 @if (Model.GenreList.Count() != 0){
                                     @foreach (var genre in Model.GenreList)
                                     {
-                                        var selectedOption = Model.GenresId is not null && Model.GenresId.Contains(genre.Id) ? "selected" : "";
+                                        var selectedOption = Model.GenresId is not null && Model.GenresId.Contains(genre.Id) 
+                                                ? "selected" : "";
                                         <option value="@genre.Id" @selectedOption>@genre.Name </option>
                                     }
                                 }
                             </select>
                         </div>
                         <div class="col-3 d-flex flex-row justify-content-end align-items-start height-70 ps-2 pe-2 mt-3">
-                            <input id="scheduleDateInput" class="fs-5 form-control h-100" name="date" type="date" value="@Model.Date" />
+                            <input id="scheduleDateInput" class="fs-5 form-control h-100" 
+                                   name="date" type="date" required
+                                   value="@Model.Date" />
                         </div>
                         <div class="col-3 d-flex flex-row justify-content-center align-items-center height-70 ps-2 mt-3">
                             <select id="scheduleGenreInput" name="hallId" class="fs-5 form-select h-100">
@@ -180,7 +183,8 @@
                                     <option value="@hall.Id">@hall.Name </option>
                                 }
                             </select>
-                            <input id="scheduleTimeStart" class="fs-5 form-control mt-3" name="startTime" type="datetime-local" />
+                            <input id="scheduleTimeStart" class="fs-5 form-control mt-3" name="startTime" type="datetime-local"
+                                   min="@DateTime.Now.Date.ToString("yyyy-MM-ddTHH:mm:ss")" />
                             <button id="creteScheduleBtn" type="submit" class="btn btn-success mt-3">Создать</button>
                         </form>
                     </div>
