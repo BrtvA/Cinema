@@ -12,11 +12,13 @@ public class GenreService : IGenreService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IGenreRepository _genreRepository;
+    private readonly IMovieGenreRepository _movieGenreRepository;
 
     public GenreService(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
         _genreRepository = unitOfWork.GenreRepository;
+        _movieGenreRepository = unitOfWork.MovieGenreRepository;
     }
 
     public async Task<ServiceResult<string>> CreateAsync(GenreReqDTO genreDTO)
@@ -104,12 +106,18 @@ public class GenreService : IGenreService
                 result = new ServiceResult<string>(
                     new NotFoundException("Такого жанра не существует"));
             }
-            else
+            else if (!await _movieGenreRepository.ExistByGenreIdAsync(id))
             {
                 _genreRepository.Delete(genre);
                 await _unitOfWork.SaveAsync();
                 result = new ServiceResult<string>("Ok");
             }
+            else
+            {
+                result = new ServiceResult<string>(
+                    new BadRequestException("Данный жанр используется"));
+            }
+
             await transaction.CommitAsync();
             return result;
         }
