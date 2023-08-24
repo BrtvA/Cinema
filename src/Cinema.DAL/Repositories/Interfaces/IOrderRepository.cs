@@ -11,6 +11,7 @@ public interface IOrderRepository
     public Task<IEnumerable<PositionModel>> ListPositionAsync(int scheduleId);
     public Task<IEnumerable<Order>> ListByTimeAsync(int minutes);
     public Task<IEnumerable<Order>> ListByGuidAsync(Guid guidId);
+    public Task<bool> ExistByScheduleId(int scheduleId);
     public void Update(Order order);
     public void Delete(IEnumerable<Order> orders);
 }
