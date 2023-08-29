@@ -7,9 +7,9 @@ public class FileService : IFileService
     private readonly string _uploadPath;
     private string FullPath
     {
-        get => $"{_uploadPath}\\{FileName}";
+        get => Path.Combine(_uploadPath, FileName);
     }
-    private IFormFile? _image;
+    private readonly IFormFile? _image;
     public string FileName { get; set; }
 
     public FileService(IFormFile image, string uploadPath)
