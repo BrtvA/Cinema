@@ -84,7 +84,6 @@ $(document).ready(function () {
             alert('В вашем браузере не поддерживается загрузка файлов');
         } else if ($(this).validate().checkForm()) {
             let formData = new FormData(this);
-            console.log(formData);
 
             let formUrl = URL_ADMIN_MOVIE_INFO;
             let formMethod = "post";
