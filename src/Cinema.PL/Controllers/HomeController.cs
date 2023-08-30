@@ -42,18 +42,18 @@ public class HomeController : Controller
             .GetSection("AppSettings")
             .GetSection("CustomerPage")["PageSizeSchedule"] ?? "4");
 
-        DISCOUNT_COEFFICIENT = Convert.ToDecimal(config
+        DISCOUNT_COEFFICIENT = 1 - Convert.ToDecimal(config
             .GetSection("AppSettings")
-            .GetSection("Payment")["DiscountCoefficient"] ?? "1");
+            .GetSection("Payment")["DiscountPercentage"] ?? "5") / 100;
         CINEMA_CARD_NUMBER = config
             .GetSection("AppSettings")
             .GetSection("Payment")["CardNumber"];
-        REDUCTION_FACTOR_PRICE = Convert.ToDecimal(config
+        REDUCTION_FACTOR_PRICE = 1 - Convert.ToDecimal(config
             .GetSection("AppSettings")
-            .GetSection("Payment")["ReductionFactorPrice"] ?? "1");
-        MULTIPLYING_FACTOR_PRICE = Convert.ToDecimal(config
+            .GetSection("Payment")["ReductionPercentagePrice"] ?? "10") / 100;
+        MULTIPLYING_FACTOR_PRICE = 1 + Convert.ToDecimal(config
             .GetSection("AppSettings")
-            .GetSection("Payment")["MultiplyingFactorPrice"] ?? "1");
+            .GetSection("Payment")["MultiplyingPercentagePrice"] ?? "10") / 100;
         REDUCTION_BOUNDARY_TIME = int.Parse(config
             .GetSection("AppSettings")
             .GetSection("Payment")["ReductionBoundaryTime"] ?? "10");
