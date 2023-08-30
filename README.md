@@ -15,6 +15,8 @@
 
 Перед запуском необходимо настроить строку подключения к базе данных PostgreSQL в файле [appsettings.json](src/Cinema.PL/appsettings.json) в разделе ```ConnectionStrings : CinemaDB```.
 
+Перед запуском модульных тестов также необходимо настроить строку подключения в файле [settings.json](test/Cinema.Test/settings.json)
+
 # Пример запуска в Docker
 
 1. Создаем docker image:
