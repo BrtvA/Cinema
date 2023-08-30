@@ -12,7 +12,7 @@ internal static class DataSeeder
         //contextDB.Database.EnsureDeleted();
         if (contextDB.Database.EnsureCreated())
         {
-            FileService.ClearAll(environment.WebRootPath + "\\uploads");
+            FileService.ClearAll(Path.Combine(environment.WebRootPath, "uploads"));
         }
     }
 }
