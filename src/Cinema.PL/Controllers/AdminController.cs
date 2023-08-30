@@ -24,13 +24,12 @@ public class AdminController : Controller
     private readonly IScheduleService _scheduleService;
 
     public AdminController(IGenreService genreService, IMovieService movieService,
-                           IScheduleService scheduleService) {
+                           IScheduleService scheduleService, IWebHostEnvironment environment) {
         _genreService = genreService;
         _movieService = movieService;
         _scheduleService = scheduleService;
 
-        _uploadPath = Path.Combine(Directory.GetCurrentDirectory().StartsWith("/") ? "/app" : ".", "wwwroot");
-        _uploadPath = Path.Combine(_uploadPath, "uploads");
+        _uploadPath = Path.Combine(environment.WebRootPath, "uploads");
 
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
