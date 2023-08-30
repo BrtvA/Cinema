@@ -24,42 +24,42 @@ internal class ExceptionHandingMiddleware
         catch (DbUpdateException ex)
         {
             await HandleExceptionAsync(httpContext,
-                $"{ex.Message}\n{ex.StackTrace}",
+                $"{ex.Message}\n{ex.Source}\n{ex.StackTrace}",
                 HttpStatusCode.InternalServerError,
                 "Такой объект уже есть");
         }
         catch (ArgumentException ex)
         {
             await HandleExceptionAsync(httpContext,
-                $"{ex.Message}\n{ex.StackTrace}",
+                $"{ex.Message}\n{ex.Source}\n{ex.StackTrace}",
                 HttpStatusCode.BadRequest,
                 "Некорректное значение");
         }
         catch (OperationCanceledException ex)
         {
             await HandleExceptionAsync(httpContext,
-               $"{ex.Message}\n{ex.StackTrace}",
+               $"{ex.Message}\n{ex.Source}\n{ex.StackTrace}",
                HttpStatusCode.InternalServerError,
                "Ошибка базы данных");
         }
         catch (InvalidOperationException ex)
         {
             await HandleExceptionAsync(httpContext,
-                $"{ex.Message}\n{ex.StackTrace}",
+                $"{ex.Message}\n{ex.Source}\n{ex.StackTrace}",
                 HttpStatusCode.InternalServerError,
                 "База данных не доступна");
         }
         catch(IOException ex)
         {
             await HandleExceptionAsync(httpContext,
-               $"{ex.Message}\n{ex.StackTrace}",
+               $"{ex.Message}\n{ex.Source}\n{ex.StackTrace}",
                HttpStatusCode.InternalServerError,
                "Файл недоступен");
         }
         catch (Exception ex)
         {
             await HandleExceptionAsync(httpContext,
-                $"{ex.Message}\n{ex.StackTrace}",
+                $"{ex.Message}\n{ex.Source}\n{ex.StackTrace}",
                 HttpStatusCode.InternalServerError,
                 "Непредвиденная ошибка");
         }
