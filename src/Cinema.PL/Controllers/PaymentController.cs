@@ -9,11 +9,23 @@ namespace Cinema.PL.Controllers;
 [Route("")]
 public class PaymentController : Controller
 {
+    private readonly bool DOCKER_BUILD;
+
     private readonly IBankAccountService _bankAccountService;
 
     public PaymentController(IBankAccountService bankAccountService)
     {
         _bankAccountService = bankAccountService;
+
+        var dockerBuild = Environment.GetEnvironmentVariable("DOCKER_BUILD");
+        if (dockerBuild is not null)
+        {
+            DOCKER_BUILD = bool.Parse(dockerBuild);
+        }
+        else
+        {
+            DOCKER_BUILD = false;
+        }
     }
 
     [HttpGet]
@@ -29,10 +41,16 @@ public class PaymentController : Controller
     {
         return await ModelState.ToValidate(async () =>
         {
+            string urlString = DOCKER_BUILD
+                ? $"{Request.Scheme}://host.docker.internal:{Request.Host.Port}"
+                : $"{Request.Scheme}://{Request.Host.ToUriComponent()}";
+
+            //string urlString = $"{Request.Scheme}://host.docker.internal:{Request.Host.Port}";
+
             var result = await _bankAccountService.BuyAsync(
                     bankAccountDTO,
                     new HttpClient { 
-                        BaseAddress = new Uri($"{Request.Scheme}://{Request.Host.Value}"),
+                        BaseAddress = new Uri(urlString),
                     },
                     "/buy-info");
 
