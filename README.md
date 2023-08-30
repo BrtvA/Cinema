@@ -38,5 +38,5 @@ docker run --network chetnet --name postgres -e POSTGRES_PASSWORD=pgpassword -d 
 
 - для ASP.NET приложения:
 ```
-docker run --network chetnet --name cinema -e ConnectionStrings:CinemaDB="Server=172.28.5.254;Database=cinemadb;User Id=postgres;Password=pgpassword;" -e DOCKER_BUILD=true -p 5000:80 cinema:1.0.0.0
+docker run --network chetnet --name cinema -e ConnectionStrings:CinemaDB="Server=172.28.5.254;Database=cinemadb;User Id=postgres;Password=pgpassword;" -p 5000:80 cinema:1.0.0.0
 ```

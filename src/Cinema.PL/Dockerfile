@@ -5,6 +5,8 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+ENV DOCKER_BUILD=true
+
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["src/Cinema.PL/Cinema.PL.csproj", "src/Cinema.PL/"]
