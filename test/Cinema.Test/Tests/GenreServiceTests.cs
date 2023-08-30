@@ -23,7 +23,6 @@ public class GenreServiceTests
 
     #region CreateAsync
     //..............Проверка создания жанра..............//
-    //Добавить проверку выбрасывания исключений
 
     [Fact]
     public async Task CreateAsync_GenreReqDTO_ResultOk()
@@ -57,7 +56,6 @@ public class GenreServiceTests
 
     #region ListAsync
     //..............Проверка получения списка жанров..............//
-    //Добавить проверку NotFoundException
 
     [Fact]
     public async Task ListAsync_TwoInteger_ResultOk()
@@ -76,7 +74,6 @@ public class GenreServiceTests
 
     #region UpdateAsync
     //..............Проверка обновления жанров..............//
-    //Добавить проверку выбрасывания исключений
 
     private async Task<ServiceResult<string>> PromtUpdateAsync(int id)
     {
@@ -115,7 +112,6 @@ public class GenreServiceTests
 
     #region DeleteAsync
     //..............Проверка удаления жанров..............//
-    //Добавить проверку выбрасывания исключений
 
     [Fact]
     public async Task DeleteAsync_Integer_ResultOk()

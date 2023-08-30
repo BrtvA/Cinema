@@ -33,8 +33,6 @@ public class MovieServiceTests
 
     #region CreateAsync
     //..............Проверка создания фильма..............//
-    //Добавить проверку NotFoundException - Добавление нового фильма не удалось
-    //Добавить проверку выбрасывания исключений
 
     private async Task<ServiceResult<string>> PromtCreateAsync(string name, bool fileExist)
     {
@@ -173,7 +171,6 @@ public class MovieServiceTests
 
     #region ListAsync
     //..............Проверка получения списка фильмов и жанров..............//
-    //Варианты входных данных
 
     [Fact]
     public async Task ListAsync_AdminMovieReqDTOAndInteger_ResultOk()
@@ -197,7 +194,6 @@ public class MovieServiceTests
 
     #region UpdateAsync
     //..............Проверка обновления фильмов..............//
-    //Добавить проверку выбрасывания исключений
 
     private async Task<ServiceResult<string>> PromtUpdateAsync(int id, bool fileExist)
     {
@@ -258,7 +254,6 @@ public class MovieServiceTests
 
     #region DeleteAsync
     //..............Проверка удаления фильмов..............//
-    //Добавить проверку выбрасывания исключений
 
     [Fact]
     public async Task DeleteAsync_IntegerAndString_ResultOk()

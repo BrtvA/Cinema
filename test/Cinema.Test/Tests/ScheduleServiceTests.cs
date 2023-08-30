@@ -24,7 +24,6 @@ public class ScheduleServiceTests
 
     #region CreateAsync
     //..............Проверка создания афиши..............//
-    //Добавить проверку выбрасывания исключений
 
     private async Task<ServiceResult<string>> PromtCreateAsync(
         int movieId, int hallId, DateTime startTime)
@@ -100,7 +99,6 @@ public class ScheduleServiceTests
 
     #region GetPriceAsync
     //..............Проверка получения цены..............//
-    //Проверка NotFoundException для movie
 
     private async Task<ServiceResult<decimal>> PromtGetPriceAsync(int id)
     {
@@ -258,7 +256,6 @@ public class ScheduleServiceTests
 
     #region UpdateAsync
     //..............Проверка списка афиши..............//
-    //Добавить проверку выбрасывания исключений
 
     private async Task<ServiceResult<string>> PromtUpdateAsync(
         int id, int movieId, int hallId, DateTime startTime)
@@ -325,7 +322,6 @@ public class ScheduleServiceTests
 
     #region DeleteAsync
     //..............Проверка удаления афиши..............//
-    //Добавить проверку выбрасывания исключений
 
     [Fact]
     public async Task DeleteAsync_Integer_ResultOk()

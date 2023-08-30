@@ -21,7 +21,6 @@ public class UserServiceTests
 
     #region LoginAsync
     //..............Проверка логина..............//
-    //Добавить проверку выбрасывания исключений
 
     [Theory]
     [InlineData("cinema@yandex.ru", "1234")]
@@ -74,7 +73,6 @@ public class UserServiceTests
 
     #region RegisterAsync
     //..............Проверка регистрации..............//
-    //Добавить проверку выбрасывания исключений
 
     [Fact]
     public async Task RegisterAsync_RegisterReqDTO_ResultOk()

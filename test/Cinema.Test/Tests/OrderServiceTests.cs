@@ -24,8 +24,6 @@ public class OrderServiceTests
 
     #region CreateAsync
     //..............Проверка списка афиши..............//
-    //Добавить проверку выбрасывания исключений
-    //Добавить проверку NotFoundException("Такого зала не существует"))
 
     private async Task<ServiceResult<string>> PromtCreateAsync(
         int scheduleId, int row, int column, string? email)
@@ -142,7 +140,6 @@ public class OrderServiceTests
 
     #region ProofOfPaymentAsync
     //..............Проверка подтверждения покупки..............//
-    //Добавить проверку выбрасывания исключений
 
     [Fact]
     public async Task ProofOfPaymentAsync_Guid_ResultOk()
