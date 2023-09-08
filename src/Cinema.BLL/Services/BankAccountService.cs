@@ -43,7 +43,7 @@ public class BankAccountService : IBankAccountService
                                        && clientAccount.Cvc != bankAccountDTO.Cvc))
             {
                 result = new ServiceResult<string>(
-                    new BadRequestException("Данные о банковской карте не найдены"));
+                    new BadRequestException("Введены неверные данные банковской карты"));
             }
             else if (clientAccount.Money < buyInfoDTO.Price)
             {
